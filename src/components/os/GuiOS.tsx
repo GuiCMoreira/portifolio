@@ -1,0 +1,38 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { AnimatePresence } from "motion/react";
+import { useOSStore } from "@/lib/store";
+import { BootScreen } from "./BootScreen";
+import { Desktop } from "./Desktop";
+
+const BOOT_FLAG = "guios.booted";
+
+export function GuiOS() {
+  const booted = useOSStore((s) => s.booted);
+  const setBooted = useOSStore((s) => s.setBooted);
+  // null = ainda não sabemos (SSR); evita flash do boot em quem já bootou na sessão.
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (window.sessionStorage.getItem(BOOT_FLAG) === "1") {
+      setBooted(true);
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setReady(true);
+  }, [setBooted]);
+
+  const finishBoot = () => {
+    window.sessionStorage.setItem(BOOT_FLAG, "1");
+    setBooted(true);
+  };
+
+  if (!ready) return <div className="h-dvh w-full bg-ink" aria-hidden />;
+
+  return (
+    <>
+      <Desktop />
+      <AnimatePresence>{!booted && <BootScreen onDone={finishBoot} />}</AnimatePresence>
+    </>
+  );
+}
