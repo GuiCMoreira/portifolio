@@ -52,4 +52,3 @@ Pensado para a [Vercel](https://vercel.com): basta importar o repositório — z
 - `prefers-reduced-motion` respeitado (boot, janelas, mobile)
 - Navegação por teclado (dock, janelas, palette)
 - Foco visível consistente
-# portifolio
