@@ -119,12 +119,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<Lang>("pt");
 
   useEffect(() => {
+    // Hidratação única a partir do localStorage/navigator — não há cascata de renders.
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved === "pt" || saved === "en") {
-      setLangState(saved);
-    } else {
-      setLangState(navigator.language?.toLowerCase().startsWith("pt") ? "pt" : "en");
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLangState(
+      saved === "pt" || saved === "en"
+        ? saved
+        : navigator.language?.toLowerCase().startsWith("pt")
+          ? "pt"
+          : "en",
+    );
   }, []);
 
   const setLang = useCallback((l: Lang) => {
