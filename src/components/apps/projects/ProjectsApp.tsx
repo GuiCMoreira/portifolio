@@ -52,9 +52,9 @@ export function ProjectsApp() {
   const visible = filterByCategory(category);
 
   return (
-    <div className="flex h-full">
-      {/* Sidebar estilo Finder */}
-      <aside className="flex w-44 shrink-0 flex-col gap-0.5 border-r border-white/5 bg-black/20 p-2">
+    <div className="flex h-full flex-col md:flex-row">
+      {/* Sidebar estilo Finder (vira chips horizontais em telas estreitas) */}
+      <aside className="os-scroll flex shrink-0 gap-0.5 overflow-x-auto border-b border-white/5 bg-black/20 p-2 md:w-44 md:flex-col md:overflow-x-visible md:border-r md:border-b-0">
         {CATEGORIES.map((cat) => {
           const Icon = cat.icon;
           const count = filterByCategory(cat.id).length;
@@ -64,7 +64,7 @@ export function ProjectsApp() {
               type="button"
               onClick={() => setCategory(cat.id)}
               className={cn(
-                "flex items-center gap-2 rounded-lg px-3 py-1.5 text-[13px] transition-colors",
+                "flex shrink-0 items-center gap-2 rounded-lg px-3 py-1.5 text-[13px] whitespace-nowrap transition-colors",
                 category === cat.id
                   ? "bg-accent/20 text-text-hi"
                   : "text-text-lo hover:bg-white/5 hover:text-text-hi",
@@ -72,7 +72,7 @@ export function ProjectsApp() {
             >
               <Icon className={cn("h-3.5 w-3.5", category === cat.id && "text-accent")} />
               {t(cat.labelKey)}
-              <span className="ml-auto font-mono text-[10px] text-text-lo/60">{count}</span>
+              <span className="font-mono text-[10px] text-text-lo/60 md:ml-auto">{count}</span>
             </button>
           );
         })}

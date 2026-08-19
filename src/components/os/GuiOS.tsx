@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { useOSStore } from "@/lib/store";
+import { useIsMobile } from "@/lib/hooks";
 import { BootScreen } from "./BootScreen";
 import { Desktop } from "./Desktop";
+import { MobileShell } from "@/components/mobile/MobileShell";
 
 const BOOT_FLAG = "guios.booted";
 
@@ -27,11 +29,13 @@ export function GuiOS() {
     setBooted(true);
   };
 
+  const isMobile = useIsMobile();
+
   if (!ready) return <div className="h-dvh w-full bg-ink" aria-hidden />;
 
   return (
     <>
-      <Desktop />
+      {isMobile ? <MobileShell /> : <Desktop />}
       <AnimatePresence>{!booted && <BootScreen onDone={finishBoot} />}</AnimatePresence>
     </>
   );
