@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GuiOS — Portfólio de Guilherme Carvalho
 
-## Getting Started
+> Um portfólio que não é um site: é um **sistema operacional**.
 
-First, run the development server:
+**GuiOS** é o portfólio pessoal de [Guilherme Carvalho](https://github.com/GuiCMoreira), desenvolvedor web fullstack. No desktop, você encontra um OS completo: boot screen, janelas arrastáveis, dock, terminal interativo e command palette (⌘K). No celular, a metáfora se adapta — o site vira um smartphone, com grade de apps e telas cheias.
+
+## Apps do sistema
+
+| App | O que faz |
+|---|---|
+| **Projetos** | Navegador estilo Finder dos projetos reais (destaque: restaurant-digital, microserviços com RabbitMQ) |
+| **Terminal** | Terminal funcional: `help`, `whoami`, `ls projetos`, `open <projeto>`, `neofetch`, `hire --me`… |
+| **Sobre** | Bio, timeline de carreira e o painel "Sobre este Dev" (paródia do "Sobre este Mac") |
+| **Contato** | GitHub, LinkedIn e e-mail |
+
+Bilíngue **PT-BR / EN** (toggle na barra de menu, comando `lang` no terminal ou via ⌘K).
+
+## Stack
+
+- [Next.js 16](https://nextjs.org) (App Router) + TypeScript
+- Tailwind CSS v4
+- [Motion](https://motion.dev) (Framer Motion) — animações de janelas e transições
+- [Zustand](https://zustand.docs.pmnd.rs) — estado do window manager
+- [cmdk](https://cmdk.paco.me) — command palette
+- Tipografia: Space Grotesk · Manrope · JetBrains Mono
+
+## Rodando localmente
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Qualidade
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint    # ESLint
+npx tsc --noEmit # typecheck
+npm run build   # build de produção
+```
 
-## Learn More
+Roteiro de QA executado em [docs/qa/](docs/qa/). Spec e plano de implementação em [docs/superpowers/](docs/superpowers/).
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Pensado para a [Vercel](https://vercel.com): basta importar o repositório — zero configuração extra.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Acessibilidade
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `prefers-reduced-motion` respeitado (boot, janelas, mobile)
+- Navegação por teclado (dock, janelas, palette)
+- Foco visível consistente
