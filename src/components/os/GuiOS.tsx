@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { useOSStore } from "@/lib/store";
 import { useIsMobile } from "@/lib/hooks";
+import { storageGet, storageSet } from "@/lib/safe-storage";
 import { BootScreen } from "./BootScreen";
 import { Desktop } from "./Desktop";
 import { MobileShell } from "@/components/mobile/MobileShell";
@@ -17,7 +18,7 @@ export function GuiOS() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (window.sessionStorage.getItem(BOOT_FLAG) === "1") {
+    if (storageGet("session", BOOT_FLAG) === "1") {
       setBooted(true);
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -25,7 +26,7 @@ export function GuiOS() {
   }, [setBooted]);
 
   const finishBoot = () => {
-    window.sessionStorage.setItem(BOOT_FLAG, "1");
+    storageSet("session", BOOT_FLAG, "1");
     setBooted(true);
   };
 

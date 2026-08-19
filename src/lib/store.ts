@@ -27,6 +27,15 @@ function initialWindows(): Record<AppId, WindowState> {
   ) as Record<AppId, WindowState>;
 }
 
+// Ao fechar/minimizar a focada, promove a janela visível de maior z.
+function nextFocus(windows: Record<AppId, WindowState>, closing: AppId): AppId | null {
+  const candidates = Object.values(windows).filter(
+    (w) => w.appId !== closing && w.open && !w.minimized,
+  );
+  if (candidates.length === 0) return null;
+  return candidates.reduce((top, w) => (w.z > top.z ? w : top)).appId;
+}
+
 interface OSStore {
   windows: Record<AppId, WindowState>;
   focused: AppId | null;
@@ -74,13 +83,13 @@ export const useOSStore = create<OSStore>((set) => ({
         ...s.windows,
         [id]: { ...s.windows[id], open: false, minimized: false, maximized: false, payload: undefined },
       },
-      focused: s.focused === id ? null : s.focused,
+      focused: s.focused === id ? nextFocus(s.windows, id) : s.focused,
     })),
 
   minimizeApp: (id) =>
     set((s) => ({
       windows: { ...s.windows, [id]: { ...s.windows[id], minimized: true } },
-      focused: s.focused === id ? null : s.focused,
+      focused: s.focused === id ? nextFocus(s.windows, id) : s.focused,
     })),
 
   toggleMaximize: (id) =>

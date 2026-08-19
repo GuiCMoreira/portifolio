@@ -34,6 +34,12 @@ export function CommandPalette() {
     setOpen(false);
   };
 
+  // Popup blocker pode devolver null — cai para navegação direta.
+  const openExternal = (url: string) => {
+    const w = window.open(url, "_blank", "noopener,noreferrer");
+    if (!w) window.location.href = url;
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -101,17 +107,11 @@ export function CommandPalette() {
                     <Languages className="h-4 w-4 text-text-lo" />
                     {t("palette.switchLang")}
                   </Command.Item>
-                  <Command.Item
-                    onSelect={() => run(() => window.open(GITHUB_URL, "_blank", "noopener,noreferrer"))}
-                  >
+                  <Command.Item onSelect={() => run(() => openExternal(GITHUB_URL))}>
                     <GitHubIcon className="h-4 w-4 text-text-lo" />
                     {t("palette.openGithub")}
                   </Command.Item>
-                  <Command.Item
-                    onSelect={() =>
-                      run(() => window.open(LINKEDIN_URL, "_blank", "noopener,noreferrer"))
-                    }
-                  >
+                  <Command.Item onSelect={() => run(() => openExternal(LINKEDIN_URL))}>
                     <LinkedInIcon className="h-4 w-4 text-text-lo" />
                     {t("palette.openLinkedin")}
                   </Command.Item>

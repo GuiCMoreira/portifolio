@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useDragControls, useReducedMotion } from "motion/react";
+import { useLayoutEffect, useState } from "react";
+import { motion, useDragControls, useMotionValue, useReducedMotion } from "motion/react";
 import { useI18n } from "@/lib/i18n";
 import { useOSStore } from "@/lib/store";
 import type { AppDefinition } from "@/data/apps";
@@ -21,10 +21,33 @@ export function Window({ app, constraintsRef }: WindowProps) {
   const minimizeApp = useOSStore((s) => s.minimizeApp);
   const toggleMaximize = useOSStore((s) => s.toggleMaximize);
   const focusApp = useOSStore((s) => s.focusApp);
+  const setPos = useOSStore((s) => s.setPos);
+  const clearPayload = useOSStore((s) => s.clearPayload);
 
   const dragControls = useDragControls();
   const reduced = useReducedMotion();
-  const contentRef = useRef<HTMLDivElement>(null);
+
+  // O drag acumula em transform (x/y). Ao soltar, dobramos o deslocamento em
+  // left/top (basePos + store) e zeramos o transform ANTES do paint — assim
+  // maximizar nunca herda transform sujo e a posição sobrevive a fechar/reabrir.
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const [basePos, setBasePos] = useState(win.pos);
+
+  useLayoutEffect(() => {
+    x.set(0);
+    y.set(0);
+  }, [basePos, x, y]);
+
+  const commitDrag = () => {
+    if (win.maximized) return;
+    const next = {
+      x: Math.max(0, Math.round(basePos.x + x.get())),
+      y: Math.max(0, Math.round(basePos.y + y.get())),
+    };
+    setBasePos(next);
+    setPos(app.id, next);
+  };
 
   const isFocused = focused === app.id;
   const AppComponent = app.component;
@@ -38,25 +61,28 @@ export function Window({ app, constraintsRef }: WindowProps) {
       dragMomentum={false}
       dragElastic={0.04}
       dragConstraints={constraintsRef}
-      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92, y: 24 }}
+      onDragEnd={commitDrag}
+      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92, translateY: 24 }}
       animate={
         win.minimized
           ? reduced
             ? { opacity: 0, transitionEnd: { visibility: "hidden" } }
-            : { opacity: 0, scale: 0.7, y: 280, transitionEnd: { visibility: "hidden" } }
-          : { opacity: 1, scale: 1, y: 0, visibility: "visible" }
+            : { opacity: 0, scale: 0.7, translateY: 280, transitionEnd: { visibility: "hidden" } }
+          : { opacity: 1, scale: 1, translateY: 0, visibility: "visible" }
       }
-      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92, y: 16 }}
+      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92, translateY: 16 }}
       transition={{ duration: reduced ? 0.1 : 0.28, ease: [0.32, 0.72, 0, 1] }}
       onPointerDown={() => focusApp(app.id)}
       className={cn(
         "glass-heavy absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/60",
-        win.maximized && "!inset-x-2 !top-10 !bottom-[4.5rem] !h-auto !w-auto",
+        win.maximized && "!inset-x-2 !top-10 !bottom-[4.5rem] !h-auto !w-auto !transform-none",
         isFocused ? "ring-1 ring-white/15" : "opacity-[0.97]",
       )}
       style={{
-        left: win.pos.x,
-        top: win.pos.y,
+        x,
+        y,
+        left: basePos.x,
+        top: basePos.y,
         width: app.defaultSize.w,
         height: app.defaultSize.h,
         maxWidth: "calc(100vw - 24px)",
@@ -106,8 +132,12 @@ export function Window({ app, constraintsRef }: WindowProps) {
       </header>
 
       {/* Conteúdo do app */}
-      <div ref={contentRef} className="os-scroll min-h-0 flex-1 overflow-y-auto">
-        <AppErrorBoundary crashedLabel={t("window.crashed")} restartLabel={t("window.restart")}>
+      <div className="os-scroll min-h-0 flex-1 overflow-y-auto">
+        <AppErrorBoundary
+          crashedLabel={t("window.crashed")}
+          restartLabel={t("window.restart")}
+          onReset={() => clearPayload(app.id)}
+        >
           <AppComponent />
         </AppErrorBoundary>
       </div>

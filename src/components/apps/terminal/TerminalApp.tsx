@@ -37,7 +37,8 @@ export function TerminalApp() {
       setHistory([]);
       return;
     }
-    setHistory((h) => [...h, { input, output: result }]);
+    // Cap evita crescimento sem limite do DOM (Enter segurado, loops colados).
+    setHistory((h) => [...h, { input, output: result }].slice(-200));
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

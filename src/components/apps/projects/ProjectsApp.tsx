@@ -34,13 +34,16 @@ export function ProjectsApp() {
 
   // Deep-link vindo do terminal ou da command palette: abre direto no detalhe.
   useEffect(() => {
-    if (payload && getProject(payload)) {
+    if (!payload) return;
+    if (getProject(payload)) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedId(payload);
-       
       setCategory("all");
-      clearPayload("projects");
+    } else if (process.env.NODE_ENV !== "production") {
+      console.warn(`[GuiOS] payload de projeto inválido: ${payload}`);
     }
+    // Consome o payload mesmo quando inválido — não fica retido no store.
+    clearPayload("projects");
   }, [payload, clearPayload]);
 
   const selected = selectedId ? getProject(selectedId) : undefined;

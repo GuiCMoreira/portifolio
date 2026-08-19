@@ -1,17 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import { AnimatePresence } from "motion/react";
-import type { AppId } from "@/lib/types";
 import { Wallpaper } from "@/components/os/Wallpaper";
 import { MobileStatusBar } from "./MobileStatusBar";
 import { MobileHome } from "./MobileHome";
 import { MobileAppView } from "./MobileAppView";
 import { useI18n } from "@/lib/i18n";
+import { useOSStore } from "@/lib/store";
 
 export function MobileShell() {
-  const [activeApp, setActiveApp] = useState<AppId | null>(null);
   const { lang, setLang } = useI18n();
+  // O app ativo vem do MESMO store do desktop: assim comandos do terminal
+  // (open <projeto>, hire --me) também navegam no mobile.
+  const windows = useOSStore((s) => s.windows);
+  const focused = useOSStore((s) => s.focused);
+  const openApp = useOSStore((s) => s.openApp);
+  const closeApp = useOSStore((s) => s.closeApp);
+
+  const activeApp =
+    focused && windows[focused].open && !windows[focused].minimized ? focused : null;
 
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden">
@@ -32,11 +39,11 @@ export function MobileShell() {
           </button>
         )}
 
-        <MobileHome onOpen={setActiveApp} />
+        <MobileHome onOpen={openApp} />
 
         <AnimatePresence>
           {activeApp && (
-            <MobileAppView key={activeApp} appId={activeApp} onClose={() => setActiveApp(null)} />
+            <MobileAppView key={activeApp} appId={activeApp} onClose={() => closeApp(activeApp)} />
           )}
         </AnimatePresence>
       </div>

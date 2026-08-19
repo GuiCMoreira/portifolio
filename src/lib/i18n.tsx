@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { Lang, LocalizedText } from "./types";
+import { storageGet, storageSet } from "./safe-storage";
 
 const STORAGE_KEY = "guios.lang";
 
@@ -120,7 +121,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Hidratação única a partir do localStorage/navigator — não há cascata de renders.
-    const saved = window.localStorage.getItem(STORAGE_KEY);
+    const saved = storageGet("local", STORAGE_KEY);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLangState(
       saved === "pt" || saved === "en"
@@ -131,15 +132,25 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  // Leitores de tela escolhem a voz pelo atributo lang do documento.
+  useEffect(() => {
+    document.documentElement.lang = lang === "pt" ? "pt-BR" : "en";
+  }, [lang]);
+
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
-    window.localStorage.setItem(STORAGE_KEY, l);
+    storageSet("local", STORAGE_KEY, l);
   }, []);
 
   const t = useCallback(
     (key: string) => {
       const entry = dict[key];
-      if (!entry) return key;
+      if (!entry) {
+        if (process.env.NODE_ENV !== "production") {
+          console.warn(`[i18n] chave ausente: ${key}`);
+        }
+        return key;
+      }
       return entry[lang];
     },
     [lang],
