@@ -5,6 +5,7 @@ import { MenuBar } from "./MenuBar";
 import { Dock } from "./Dock";
 import { WelcomeWidget } from "./WelcomeWidget";
 import { WindowLayer } from "./WindowLayer";
+import { CommandPalette } from "./CommandPalette";
 
 export function Desktop() {
   return (
@@ -14,6 +15,7 @@ export function Desktop() {
       <WelcomeWidget />
       <WindowLayer />
       <Dock />
+      <CommandPalette />
     </div>
   );
 }
