@@ -12,7 +12,7 @@ import { storageGet, storageSet } from "@/lib/safe-storage";
 
 // ---------- Widget de clima real (Bragança Paulista, Open-Meteo) ----------
 
-function weatherEmoji(code: number): string {
+export function weatherEmoji(code: number): string {
   if (code === 0) return "☀️";
   if (code <= 2) return "🌤️";
   if (code === 3) return "☁️";
@@ -83,7 +83,7 @@ export function ContactNotification() {
           animate={{ opacity: 1, x: 0 }}
           exit={reduced ? { opacity: 0 } : { opacity: 0, x: 80 }}
           transition={{ type: "spring", stiffness: 300, damping: 28 }}
-          className="glass-heavy absolute top-12 right-6 z-[70] w-80 rounded-2xl p-3.5 shadow-2xl shadow-black/30"
+          className="glass-heavy fixed top-[calc(env(safe-area-inset-top)+2.75rem)] right-4 left-4 z-[70] rounded-2xl p-3.5 shadow-2xl shadow-black/30 sm:top-12 sm:right-6 sm:left-auto sm:w-80"
           role="alert"
         >
           <div className="flex items-start gap-3">

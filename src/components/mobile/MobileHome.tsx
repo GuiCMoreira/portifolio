@@ -11,7 +11,12 @@ import {
   GitHubTileIcon,
   InstagramTileIcon,
   LinkedInTileIcon,
+  SettingsTileIcon,
+  TrashIcon,
 } from "@/components/ui/app-icons";
+import { useOSStore } from "@/lib/store";
+import { useWeather } from "@/lib/hooks";
+import { weatherEmoji } from "@/components/os/DesktopExtras";
 
 interface MobileHomeProps {
   onOpen: (id: AppId, originLayoutId: string) => void;
@@ -82,6 +87,7 @@ function SocialIcon({ label, href, Icon }: (typeof SOCIALS)[number]) {
 function WidgetDate() {
   const { lang } = useI18n();
   const [now, setNow] = useState<Date | null>(null);
+  const weather = useWeather();
 
   useEffect(() => {
     // Hidrata no client para não divergir do SSR.
@@ -98,8 +104,13 @@ function WidgetDate() {
   }).format(now);
 
   return (
-    <p className="font-mono text-[10px] tracking-wide text-text-lo uppercase first-letter:uppercase">
-      {formatted}
+    <p className="flex items-center justify-between font-mono text-[10px] tracking-wide text-text-lo uppercase">
+      <span className="first-letter:uppercase">{formatted}</span>
+      {weather && (
+        <span className="text-text-hi/90">
+          {weatherEmoji(weather.code)} {weather.temp}°
+        </span>
+      )}
     </p>
   );
 }
@@ -109,8 +120,24 @@ const DOCK_IDS: AppId[] = ["projects", "terminal", "about", "contact"];
 
 export function MobileHome({ onOpen }: MobileHomeProps) {
   const { t } = useI18n();
+  const setSystemDialog = useOSStore((s) => s.setSystemDialog);
   const gridApps = APPS.filter((a) => !DOCK_IDS.includes(a.id));
   const dockApps = DOCK_IDS.map((id) => APPS.find((a) => a.id === id)!);
+
+  const systemTiles = [
+    {
+      id: "settings" as const,
+      label: t("mobile.settings"),
+      icon: <SettingsTileIcon className="h-16 w-16 drop-shadow-lg" />,
+      open: () => setSystemDialog("settings"),
+    },
+    {
+      id: "trash" as const,
+      label: t("trash.title"),
+      icon: <TrashIcon className="h-16 w-16 drop-shadow-lg" />,
+      open: () => setSystemDialog("trash"),
+    },
+  ];
 
   return (
     <div className="flex flex-1 flex-col px-6 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]">
@@ -136,6 +163,23 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
           </div>
         </div>
         <p className="mt-3 text-[13px] leading-relaxed text-text-lo">{t("welcome.tagline")}</p>
+      </div>
+
+      {/* Apps de sistema: Ajustes e Lixeira */}
+      <div className="mt-8 grid grid-cols-4 gap-x-4 gap-y-6">
+        {systemTiles.map((tile) => (
+          <motion.button
+            key={tile.id}
+            type="button"
+            onClick={tile.open}
+            whileTap={{ scale: 0.9 }}
+            className="flex flex-col items-center gap-1.5"
+            aria-label={tile.label}
+          >
+            {tile.icon}
+            <span className="text-[11px] text-text-hi/85">{tile.label}</span>
+          </motion.button>
+        ))}
       </div>
 
       {/* Última linha da home: Safari + sociais, 4 alinhados como o dock */}

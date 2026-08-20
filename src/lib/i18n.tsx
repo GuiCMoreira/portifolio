@@ -230,6 +230,8 @@ const dict: Record<string, LocalizedText> = {
   "settings.dark": { pt: "Escuro", en: "Dark" },
   "settings.language": { pt: "Idioma", en: "Language" },
   "settings.wallpaper": { pt: "Fundo de tela", en: "Wallpaper" },
+  "settings.system": { pt: "Sistema", en: "System" },
+  "mobile.settings": { pt: "Ajustes", en: "Settings" },
 
   // Clima, notificação e menu de contexto
   "weather.aria": { pt: "Clima em Bragança Paulista", en: "Weather in Bragança Paulista" },

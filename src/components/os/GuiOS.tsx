@@ -8,6 +8,8 @@ import { storageGet, storageSet } from "@/lib/safe-storage";
 import { BootScreen } from "./BootScreen";
 import { Desktop } from "./Desktop";
 import { PowerOverlay } from "./PowerOverlay";
+import { SystemDialogs } from "./SystemDialogs";
+import { ContactNotification } from "./DesktopExtras";
 import { MobileShell } from "@/components/mobile/MobileShell";
 
 const BOOT_FLAG = "guios.booted";
@@ -38,6 +40,8 @@ export function GuiOS() {
   return (
     <>
       {isMobile ? <MobileShell /> : <Desktop />}
+      <SystemDialogs />
+      <ContactNotification />
       <AnimatePresence>{!booted && <BootScreen onDone={finishBoot} />}</AnimatePresence>
       <PowerOverlay />
     </>

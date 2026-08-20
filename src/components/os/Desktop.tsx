@@ -6,8 +6,7 @@ import { Dock } from "./Dock";
 import { WelcomeWidget } from "./WelcomeWidget";
 import { WindowLayer } from "./WindowLayer";
 import { CommandPalette } from "./CommandPalette";
-import { SystemDialogs } from "./SystemDialogs";
-import { ContactNotification, DesktopContextMenu, WeatherWidget } from "./DesktopExtras";
+import { DesktopContextMenu, WeatherWidget } from "./DesktopExtras";
 
 export function Desktop() {
   return (
@@ -19,8 +18,6 @@ export function Desktop() {
       <WindowLayer />
       <Dock />
       <CommandPalette />
-      <SystemDialogs />
-      <ContactNotification />
       <DesktopContextMenu />
     </div>
   );

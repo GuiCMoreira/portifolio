@@ -134,6 +134,28 @@ export function LinkedInTileIcon({ className }: IconProps) {
   );
 }
 
+export function SettingsTileIcon({ className }: IconProps) {
+  const teeth = Array.from({ length: 8 }, (_, i) => i * 45);
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <defs>
+        <linearGradient id="stg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ececf0" />
+          <stop offset="1" stopColor="#c3c5cc" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#stg)" />
+      <g fill="#63656d">
+        {teeth.map((a) => (
+          <rect key={a} x="29" y="9" width="6" height="10" rx="2.5" transform={`rotate(${a} 32 32)`} />
+        ))}
+        <circle cx="32" cy="32" r="15" />
+      </g>
+      <circle cx="32" cy="32" r="6.5" fill="#d4d6db" />
+    </svg>
+  );
+}
+
 export function TrashIcon({ className }: IconProps) {
   // Cesto cheio estilo macOS — asset do tema WhiteSur (GPL-3, crédito no README).
   // eslint-disable-next-line @next/next/no-img-element

@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Languages, Moon, Sun, X } from "lucide-react";
+import { Languages, Moon, Power, RotateCcw, Sun, X } from "lucide-react";
+import { storageSet } from "@/lib/safe-storage";
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { useOSStore } from "@/lib/store";
@@ -139,6 +140,23 @@ function SettingsDialog({ onClose }: { onClose: () => void }) {
   const { t, lang, setLang } = useI18n();
   const { theme, setTheme } = useTheme();
   const { wallpaper, setWallpaper } = useWallpaper();
+  const closeAll = useOSStore((s) => s.closeAll);
+  const setBooted = useOSStore((s) => s.setBooted);
+  const setPowerState = useOSStore((s) => s.setPowerState);
+
+  const restart = () => {
+    storageSet("session", "guios.booted", "0");
+    closeAll();
+    onClose();
+    setBooted(false);
+  };
+
+  const shutdown = () => {
+    storageSet("session", "guios.booted", "0");
+    closeAll();
+    onClose();
+    setPowerState("off");
+  };
 
   return (
     <DialogShell title={t("sysmenu.settings")} onClose={onClose}>
@@ -192,6 +210,18 @@ function SettingsDialog({ onClose }: { onClose: () => void }) {
             )}
           </button>
         ))}
+      </div>
+
+      <p className="mt-4 mb-1.5 font-mono text-[10px] tracking-widest text-text-lo uppercase">
+        {t("settings.system")}
+      </p>
+      <div className="flex gap-2">
+        <OptionRow selected={false} onSelect={restart}>
+          <RotateCcw className="h-3.5 w-3.5" /> {t("sysmenu.restart")}
+        </OptionRow>
+        <OptionRow selected={false} onSelect={shutdown}>
+          <Power className="h-3.5 w-3.5" /> {t("sysmenu.shutdown")}
+        </OptionRow>
       </div>
     </DialogShell>
   );
