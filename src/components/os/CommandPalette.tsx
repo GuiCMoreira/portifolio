@@ -56,7 +56,7 @@ export function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reduced ? {} : { opacity: 0, scale: 0.97, y: -8 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="glass-heavy w-full max-w-lg overflow-hidden rounded-2xl shadow-2xl shadow-black/60"
+            className="glass-solid w-full max-w-lg overflow-hidden rounded-2xl shadow-2xl shadow-black/60"
             onClick={(e) => e.stopPropagation()}
           >
             <Command label={t("menubar.palette")} loop>

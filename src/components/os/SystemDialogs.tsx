@@ -44,7 +44,7 @@ function DialogShell({
         exit={reduced ? {} : { opacity: 0, scale: 0.95, y: 8 }}
         transition={{ duration: 0.18, ease: "easeOut" }}
         className={cn(
-          "glass-heavy relative rounded-2xl p-6 shadow-2xl shadow-black/40",
+          "glass-solid relative rounded-2xl p-6 shadow-2xl shadow-black/40",
           wide ? "w-[26rem] max-w-[calc(100vw-2rem)]" : "w-80",
         )}
         onClick={(e) => e.stopPropagation()}

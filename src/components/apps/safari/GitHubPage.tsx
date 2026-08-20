@@ -136,30 +136,32 @@ export function GitHubPage() {
 
   return (
     <div className="p-6">
-      <header className="flex items-start gap-4">
-        <Image
-          src={user.avatar_url}
-          alt={user.name}
-          width={64}
-          height={64}
-          className="rounded-full ring-1 ring-line"
-        />
-        <div className="min-w-0">
-          <h2 className="text-xl font-bold text-text-hi">{user.name}</h2>
-          <p className="font-mono text-[12px] text-text-lo">@{user.login}</p>
-          {user.bio && <p className="mt-1 text-[13px] text-text-lo">{user.bio}</p>}
-          <p className="mt-2 flex items-center gap-1.5 text-[12px] text-text-lo">
-            <Users className="h-3.5 w-3.5" />
-            <b className="text-text-hi">{user.followers}</b> {t("safari.ghFollowers")} ·{" "}
-            <b className="text-text-hi">{user.following}</b> {t("safari.ghFollowing")} ·{" "}
-            <b className="text-text-hi">{user.public_repos}</b> {t("safari.ghRepoCount")}
-          </p>
+      <header>
+        <div className="flex items-center gap-4">
+          <Image
+            src={user.avatar_url}
+            alt={user.name}
+            width={64}
+            height={64}
+            className="shrink-0 rounded-full ring-1 ring-line"
+          />
+          <div className="min-w-0">
+            <h2 className="text-xl font-bold text-text-hi">{user.name}</h2>
+            <p className="font-mono text-[12px] text-text-lo">@{user.login}</p>
+          </div>
         </div>
+        {user.bio && <p className="mt-3 text-[13px] leading-relaxed text-text-lo">{user.bio}</p>}
+        <p className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[12px] text-text-lo">
+          <Users className="h-3.5 w-3.5" />
+          <b className="text-text-hi">{user.followers}</b> {t("safari.ghFollowers")} ·{" "}
+          <b className="text-text-hi">{user.following}</b> {t("safari.ghFollowing")} ·{" "}
+          <b className="text-text-hi">{user.public_repos}</b> {t("safari.ghRepoCount")}
+        </p>
         <a
           href={GITHUB_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-fill-2 px-3 py-1.5 text-[12px] font-medium text-text-hi hover:bg-fill-3"
+          className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-fill-2 px-3 py-1.5 text-[12px] font-medium text-text-hi hover:bg-fill-3"
         >
           <ExternalLink className="h-3.5 w-3.5" />
           {t("safari.ghOpen")}

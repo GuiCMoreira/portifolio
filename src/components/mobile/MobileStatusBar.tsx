@@ -25,7 +25,7 @@ function StatusSheet({ onClose, children }: { onClose: () => void; children: Rea
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduced ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.97 }}
         transition={{ duration: 0.18, ease: "easeOut" }}
-        className="glass-heavy absolute top-full right-3 left-3 z-50 origin-top rounded-2xl shadow-2xl shadow-black/30 [&>div]:w-auto"
+        className="glass-solid absolute top-full right-3 left-3 z-50 origin-top rounded-2xl shadow-2xl shadow-black/40 [&>div]:w-auto"
       >
         {children}
       </motion.div>
