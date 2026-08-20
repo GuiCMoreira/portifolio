@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, ExternalLink, Globe, House, Lock, RotateCw } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useOSStore } from "@/lib/store";
@@ -12,15 +12,15 @@ import {
   FinderIcon,
 } from "@/components/ui/app-icons";
 import { cn } from "@/lib/utils";
-import { displayUrl, resolveInput, type SafariPage } from "./pages";
+import { displayUrl, resolveInput, samePage, type SafariPage } from "./pages";
 import { GitHubPage } from "./GitHubPage";
+import { GitHubRepoPage } from "./GitHubRepoPage";
 
 const START: SafariPage = { kind: "start" };
 
 function StartPage({ onNavigate }: { onNavigate: (input: string) => void }) {
   const { t, tx } = useI18n();
-  const openApp = useOSStore((s) => s.openApp);
-  const featured = projects.filter((p) => p.featured);
+  const featured = projects.filter((p) => p.featured && p.github);
 
   const favorites = [
     { label: "GitHub", icon: <GitHubTileIcon className="h-14 w-14" />, go: () => onNavigate(GITHUB_URL) },
@@ -56,7 +56,7 @@ function StartPage({ onNavigate }: { onNavigate: (input: string) => void }) {
           <button
             key={p.id}
             type="button"
-            onClick={() => openApp("projects", p.id)}
+            onClick={() => onNavigate(p.github!)}
             className="flex items-center gap-3 rounded-xl border border-line bg-inset p-3 text-left transition-colors hover:border-line-strong hover:bg-fill-1"
           >
             <FinderIcon className="h-9 w-9 shrink-0" />
@@ -75,15 +75,17 @@ function StartPage({ onNavigate }: { onNavigate: (input: string) => void }) {
 
 function BlockedPage({ url, host }: { url: string; host: string }) {
   const { t } = useI18n();
+  // "instagram.com" → "Instagram"
+  const siteName = host.split(".")[0].replace(/^./, (c) => c.toUpperCase());
   return (
     <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
       <span className="flex h-14 w-14 items-center justify-center rounded-full bg-fill-1">
         <Globe className="h-7 w-7 text-text-lo" />
       </span>
-      <p className="text-[14px] font-semibold text-text-hi">
-        {host} {t("safari.blockedTitle")}
+      <p className="max-w-80 text-[14px] font-semibold text-text-hi">
+        {t("safari.blockedTitle1")} {siteName} {t("safari.blockedTitle2")}
       </p>
-      <p className="max-w-72 text-[12px] text-text-lo">{t("safari.blockedHint")}</p>
+      <p className="max-w-80 text-[12px] text-text-lo">{t("safari.blockedHint")}</p>
       <a
         href={url}
         target="_blank"
@@ -91,7 +93,7 @@ function BlockedPage({ url, host }: { url: string; host: string }) {
         className="mt-1 flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-[13px] font-semibold text-white transition-transform hover:scale-[1.02]"
       >
         <ExternalLink className="h-4 w-4" />
-        {t("safari.openNewTab")}
+        {t("safari.openYourBrowser")}
       </a>
     </div>
   );
@@ -99,25 +101,46 @@ function BlockedPage({ url, host }: { url: string; host: string }) {
 
 export function SafariApp() {
   const { t } = useI18n();
-  const [history, setHistory] = useState<SafariPage[]>([START]);
-  const [index, setIndex] = useState(0);
+  // Pilha + índice num estado único: atualização atômica e idempotente
+  // (o StrictMode roda effects 2x em dev — estados separados dessincronizavam).
+  const [nav, setNav] = useState<{ stack: SafariPage[]; index: number }>({
+    stack: [START],
+    index: 0,
+  });
   const [address, setAddress] = useState("");
   const [frameKey, setFrameKey] = useState(0);
 
-  const page = history[index];
+  const page = nav.stack[nav.index];
 
-  const navigateTo = (page: SafariPage) => {
-    setHistory((h) => [...h.slice(0, index + 1), page]);
-    setIndex((i) => i + 1);
-    setAddress(displayUrl(page));
+  const navigateTo = (next: SafariPage) => {
+    setNav((prev) => {
+      // Já estamos nessa página? Não empilha de novo (a casinha na home,
+      // por exemplo, não pode apagar o histórico de "avançar").
+      if (samePage(next, prev.stack[prev.index])) return prev;
+      const stack = [...prev.stack.slice(0, prev.index + 1), next];
+      return { stack, index: stack.length - 1 };
+    });
+    setAddress(displayUrl(next));
   };
 
   const navigateInput = (input: string) => navigateTo(resolveInput(input));
 
+  // Deep-link: dock/palette podem abrir o Safari já numa página (payload).
+  const payload = useOSStore((s) => s.windows.safari.payload);
+  const clearPayload = useOSStore((s) => s.clearPayload);
+  useEffect(() => {
+    if (!payload) return;
+    // Navegação única disparada por deep-link — idempotente via samePage.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    navigateTo(resolveInput(payload));
+    clearPayload("safari");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [payload]);
+
   const go = (delta: number) => {
-    const next = Math.min(Math.max(index + delta, 0), history.length - 1);
-    setIndex(next);
-    setAddress(displayUrl(history[next]));
+    const next = Math.min(Math.max(nav.index + delta, 0), nav.stack.length - 1);
+    setNav((prev) => ({ ...prev, index: Math.min(next, prev.stack.length - 1) }));
+    setAddress(displayUrl(nav.stack[next]));
   };
 
   return (
@@ -127,7 +150,7 @@ export function SafariApp() {
         <button
           type="button"
           onClick={() => go(-1)}
-          disabled={index === 0}
+          disabled={nav.index === 0}
           className="rounded-md p-1 text-text-hi/80 hover:bg-fill-1 disabled:opacity-30"
           aria-label={t("safari.back")}
         >
@@ -136,7 +159,7 @@ export function SafariApp() {
         <button
           type="button"
           onClick={() => go(1)}
-          disabled={index >= history.length - 1}
+          disabled={nav.index >= nav.stack.length - 1}
           className="rounded-md p-1 text-text-hi/80 hover:bg-fill-1 disabled:opacity-30"
           aria-label={t("safari.forward")}
         >
@@ -182,6 +205,7 @@ export function SafariApp() {
       <div className={cn("os-scroll min-h-0 flex-1", page.kind !== "web" && "overflow-y-auto")}>
         {page.kind === "start" && <StartPage onNavigate={navigateInput} />}
         {page.kind === "github" && <GitHubPage key={frameKey} />}
+        {page.kind === "github-repo" && <GitHubRepoPage key={`${page.repo}-${frameKey}`} name={page.repo} />}
         {page.kind === "blocked" && <BlockedPage url={page.url} host={page.host} />}
         {page.kind === "web" && (
           <div className="flex h-full flex-col">

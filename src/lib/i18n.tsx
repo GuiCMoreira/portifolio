@@ -139,18 +139,22 @@ const dict: Record<string, LocalizedText> = {
   "safari.favorites": { pt: "Favoritos", en: "Favorites" },
   "safari.myProjects": { pt: "Meus projetos", en: "My projects" },
   "safari.myProjectsHint": {
-    pt: "abre no app Projetos — demos rodarão aqui dentro em breve",
-    en: "opens in the Projects app — live demos will run in here soon",
+    pt: "abre o repositório aqui mesmo — demos ao vivo em breve",
+    en: "opens the repository right here — live demos coming soon",
   },
-  "safari.blockedTitle": {
-    pt: "não permite visualização embutida",
-    en: "doesn't allow embedded viewing",
+  "safari.blockedTitle1": { pt: "Infelizmente o", en: "Unfortunately" },
+  "safari.blockedTitle2": {
+    pt: "não deixa eu carregá-lo aqui dentro 😅",
+    en: "won't let me load it in here 😅",
   },
   "safari.blockedHint": {
-    pt: "É uma proteção do próprio site (X-Frame-Options). Dá para abrir em uma nova aba:",
-    en: "It's the site's own protection (X-Frame-Options). You can open it in a new tab:",
+    pt: "Um navegador dentro de um navegador já era pedir demais para eles… mas lá fora funciona:",
+    en: "A browser inside a browser was too much to ask of them… but it works out there:",
   },
-  "safari.openNewTab": { pt: "Abrir em nova aba", en: "Open in new tab" },
+  "safari.openYourBrowser": {
+    pt: "Abrir no seu navegador (o de verdade 😉)",
+    en: "Open in your browser (the real one 😉)",
+  },
   "safari.iframeHint": {
     pt: "Se a página ficar em branco, o site bloqueia visualização embutida.",
     en: "If the page stays blank, the site blocks embedding.",
@@ -159,7 +163,11 @@ const dict: Record<string, LocalizedText> = {
     pt: "Não deu para carregar o GitHub agora (limite da API pública). Tente pelo site oficial:",
     en: "Couldn't load GitHub right now (public API rate limit). Try the official site:",
   },
-  "safari.ghOpen": { pt: "Ver no GitHub", en: "View on GitHub" },
+  "safari.ghOpen": {
+    pt: "Ver no seu navegador (o de verdade 😉)",
+    en: "View in your browser (the real one 😉)",
+  },
+  "safari.repoUpdated": { pt: "atualizado em", en: "updated" },
   "safari.ghRepos": { pt: "Repositórios recentes", en: "Recent repositories" },
   "safari.ghFollowers": { pt: "seguidores", en: "followers" },
   "safari.ghFollowing": { pt: "seguindo", en: "following" },

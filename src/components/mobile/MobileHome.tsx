@@ -138,17 +138,11 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
         <p className="mt-3 text-[13px] leading-relaxed text-text-lo">{t("welcome.tagline")}</p>
       </div>
 
-      {/* Apps fora do dock (Safari e futuros) */}
-      {gridApps.length > 0 && (
-        <div className="mt-8 grid grid-cols-4 gap-x-4 gap-y-6">
-          {gridApps.map((app) => (
-            <AppIcon key={app.id} id={app.id} size="grid" onOpen={onOpen} />
-          ))}
-        </div>
-      )}
-
-      {/* Sociais: última linha da home, logo acima do dock */}
+      {/* Última linha da home: Safari + sociais, 4 alinhados como o dock */}
       <div className="mt-auto mb-5 flex items-center justify-around px-4">
+        {gridApps.map((app) => (
+          <AppIcon key={app.id} id={app.id} size="grid" onOpen={onOpen} />
+        ))}
         {SOCIALS.map((social) => (
           <SocialIcon key={social.id} {...social} />
         ))}

@@ -100,8 +100,9 @@ function DockItem({ mouseX, label, onActivate, showDot, bounce, href, children }
   );
 }
 
-const SOCIALS = [
-  { id: "github", label: "GitHub", href: GITHUB_URL, Icon: GitHubTileIcon },
+// GitHub abre dentro do Safari do GuiOS (página renderizada); os demais, em nova aba.
+const SOCIALS: { id: string; label: string; Icon: typeof GitHubTileIcon; href?: string; safariUrl?: string }[] = [
+  { id: "github", label: "GitHub", safariUrl: GITHUB_URL, Icon: GitHubTileIcon },
   { id: "linkedin", label: "LinkedIn", href: LINKEDIN_URL, Icon: LinkedInTileIcon },
   { id: "instagram", label: "Instagram", href: INSTAGRAM_URL, Icon: InstagramTileIcon },
 ];
@@ -140,8 +141,17 @@ export function Dock() {
       {/* separador: apps do sistema | links externos */}
       <div className="mx-1 mb-2.5 h-10 w-px self-end bg-line-strong" aria-hidden />
 
-      {SOCIALS.map(({ id, label, href, Icon }) => (
-        <DockItem key={id} mouseX={mouseX} label={label} href={href} bounce onActivate={() => {}}>
+      {SOCIALS.map(({ id, label, href, safariUrl, Icon }) => (
+        <DockItem
+          key={id}
+          mouseX={mouseX}
+          label={label}
+          href={href}
+          bounce
+          onActivate={() => {
+            if (safariUrl) openApp("safari", safariUrl);
+          }}
+        >
           <Icon className="h-full w-full drop-shadow-md" />
         </DockItem>
       ))}

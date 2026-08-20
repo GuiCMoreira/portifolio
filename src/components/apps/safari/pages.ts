@@ -4,8 +4,16 @@
 export type SafariPage =
   | { kind: "start" }
   | { kind: "github" }
+  | { kind: "github-repo"; repo: string }
   | { kind: "web"; url: string }
   | { kind: "blocked"; url: string; host: string };
+
+export function samePage(a: SafariPage, b: SafariPage): boolean {
+  if (a.kind !== b.kind) return false;
+  if (a.kind === "web" || a.kind === "blocked") return a.url === (b as { url: string }).url;
+  if (a.kind === "github-repo") return a.repo === (b as { repo: string }).repo;
+  return true;
+}
 
 // Sites que proíbem embed via X-Frame-Options/frame-ancestors.
 const BLOCKED_HOSTS = [
@@ -25,6 +33,8 @@ export function displayUrl(page: SafariPage): string {
       return "";
     case "github":
       return "github.com/GuiCMoreira";
+    case "github-repo":
+      return `github.com/GuiCMoreira/${page.repo}`;
     case "web":
       return page.url.replace(/^https?:\/\//, "");
     case "blocked":
@@ -46,10 +56,12 @@ export function resolveInput(raw: string): SafariPage {
 
   const host = url.hostname.replace(/^www\./, "").toLowerCase();
 
-  // Perfil do Gui no GitHub tem versão renderizada própria (a API permite).
+  // Perfil e repositórios do Gui têm versão renderizada própria (a API permite).
   if (host === "github.com") {
-    const path = url.pathname.replace(/\/$/, "").toLowerCase();
-    if (path === "" || path === "/guicmoreira") return { kind: "github" };
+    const path = url.pathname.replace(/\/$/, "");
+    if (path === "" || path.toLowerCase() === "/guicmoreira") return { kind: "github" };
+    const repoMatch = path.match(/^\/guicmoreira\/([^/]+)$/i);
+    if (repoMatch) return { kind: "github-repo", repo: repoMatch[1] };
   }
 
   if (BLOCKED_HOSTS.some((b) => host === b || host.endsWith(`.${b}`))) {
