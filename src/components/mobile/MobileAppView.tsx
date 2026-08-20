@@ -40,7 +40,7 @@ export function MobileAppView({ appId, onClose }: MobileAppViewProps) {
         </span>
       </header>
 
-      <div className="os-scroll min-h-0 flex-1 overflow-y-auto">
+      <div className="os-scroll min-h-0 flex-1 overflow-y-auto pb-[env(safe-area-inset-bottom)]">
         <AppErrorBoundary crashedLabel={t("window.crashed")} restartLabel={t("window.restart")}>
           <AppComponent />
         </AppErrorBoundary>

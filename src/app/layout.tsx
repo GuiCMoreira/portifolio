@@ -52,6 +52,9 @@ export const metadata: Metadata = {
 
 export const viewport = {
   themeColor: "#07080c",
+  // viewport-fit=cover: o GuiOS ocupa a tela toda em iPhones com notch;
+  // os safe-area-insets protegem status bar, dock e home indicator.
+  viewportFit: "cover" as const,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
