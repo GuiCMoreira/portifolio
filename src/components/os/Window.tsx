@@ -75,9 +75,10 @@ export function Window({ app, constraintsRef }: WindowProps) {
       onPointerDown={() => focusApp(app.id)}
       className={cn(
         "window-surface absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
-        // Maximizada = tela inteira, como fullscreen do macOS (cobre menu bar e dock).
+        // Maximizada = zoom do macOS: ocupa a tela ABAIXO da menu bar (traffic
+        // lights visíveis); o dock continua por cima, como no Mac real.
         // fixed escapa do WindowLayer (que desconta menu bar/dock do espaço útil).
-        win.maximized && "!fixed !inset-0 !h-auto !w-auto !transform-none !rounded-none",
+        win.maximized && "!fixed !inset-x-0 !top-8 !bottom-0 !h-auto !w-auto !transform-none !rounded-none",
         isFocused && "ring-1 ring-line-strong",
       )}
       style={{
@@ -89,7 +90,9 @@ export function Window({ app, constraintsRef }: WindowProps) {
         height: app.defaultSize.h,
         maxWidth: win.maximized ? undefined : "calc(100vw - 24px)",
         maxHeight: win.maximized ? undefined : "calc(100dvh - 7rem)",
-        zIndex: win.maximized ? 60 : win.z,
+        // O WindowLayer (z-20) cria o stacking context: menu bar e dock (z-40)
+        // ficam sempre acima, mesmo com a janela maximizada.
+        zIndex: win.z,
       }}
       aria-label={t(app.titleKey)}
     >
