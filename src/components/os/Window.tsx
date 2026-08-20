@@ -74,9 +74,11 @@ export function Window({ app, constraintsRef }: WindowProps) {
       transition={{ duration: reduced ? 0.1 : 0.28, ease: [0.32, 0.72, 0, 1] }}
       onPointerDown={() => focusApp(app.id)}
       className={cn(
-        "glass-heavy absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/60",
-        win.maximized && "!inset-x-2 !top-10 !bottom-[4.5rem] !h-auto !w-auto !transform-none",
-        isFocused ? "ring-1 ring-line-strong" : "opacity-[0.97]",
+        "window-surface absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
+        // Maximizada = tela inteira, como fullscreen do macOS (cobre menu bar e dock).
+        // fixed escapa do WindowLayer (que desconta menu bar/dock do espaço útil).
+        win.maximized && "!fixed !inset-0 !h-auto !w-auto !transform-none !rounded-none",
+        isFocused && "ring-1 ring-line-strong",
       )}
       style={{
         x,
@@ -85,9 +87,9 @@ export function Window({ app, constraintsRef }: WindowProps) {
         top: basePos.y,
         width: app.defaultSize.w,
         height: app.defaultSize.h,
-        maxWidth: "calc(100vw - 24px)",
-        maxHeight: "calc(100dvh - 7rem)",
-        zIndex: win.z,
+        maxWidth: win.maximized ? undefined : "calc(100vw - 24px)",
+        maxHeight: win.maximized ? undefined : "calc(100dvh - 7rem)",
+        zIndex: win.maximized ? 60 : win.z,
       }}
       aria-label={t(app.titleKey)}
     >
