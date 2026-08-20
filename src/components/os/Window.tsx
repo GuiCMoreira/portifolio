@@ -1,7 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
-import { motion, useDragControls, useMotionValue, useReducedMotion } from "motion/react";
+import { useEffect, useRef } from "react";
+import {
+  animate,
+  motion,
+  useDragControls,
+  useMotionValue,
+  useReducedMotion,
+} from "motion/react";
 import { useI18n } from "@/lib/i18n";
 import { useOSStore } from "@/lib/store";
 import type { AppDefinition } from "@/data/apps";
@@ -12,6 +18,9 @@ interface WindowProps {
   app: AppDefinition;
   constraintsRef: React.RefObject<HTMLDivElement | null>;
 }
+
+// Folga entre o fundo do WindowLayer e o topo do dock (76px do viewport - 64px do layer).
+const DOCK_GAP = 12;
 
 export function Window({ app, constraintsRef }: WindowProps) {
   const { t } = useI18n();
@@ -27,72 +36,119 @@ export function Window({ app, constraintsRef }: WindowProps) {
   const dragControls = useDragControls();
   const reduced = useReducedMotion();
 
-  // O drag acumula em transform (x/y). Ao soltar, dobramos o deslocamento em
-  // left/top (basePos + store) e zeramos o transform ANTES do paint — assim
-  // maximizar nunca herda transform sujo e a posição sobrevive a fechar/reabrir.
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const [basePos, setBasePos] = useState(win.pos);
+  // Canais separados de transform:
+  // - x/y pertencem SÓ ao drag (sem re-render, sem replay ao soltar);
+  // - tx/ty pertencem SÓ à maximização (compensam a posição arrastada).
+  // O alvo da maximização é medido do DOM — nunca dessincroniza do visual.
+  const x = useMotionValue(win.pos.x);
+  const y = useMotionValue(win.pos.y);
+  const tx = useMotionValue(0);
+  const ty = useMotionValue(0);
+  const w = useMotionValue(app.defaultSize.w);
+  const h = useMotionValue(app.defaultSize.h);
+  const radius = useMotionValue(12);
 
-  useLayoutEffect(() => {
-    x.set(0);
-    y.set(0);
-  }, [basePos, x, y]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const firstRun = useRef(true);
 
-  const commitDrag = () => {
-    if (win.maximized) return;
-    const next = {
-      x: Math.max(0, Math.round(basePos.x + x.get())),
-      y: Math.max(0, Math.round(basePos.y + y.get())),
-    };
-    setBasePos(next);
-    setPos(app.id, next);
-  };
+  useEffect(() => {
+    const layerRect = () => constraintsRef.current?.getBoundingClientRect();
+
+    // No mount, só anima se já nascer maximizada (não acontece hoje).
+    if (firstRun.current) {
+      firstRun.current = false;
+      if (!win.maximized) return;
+    }
+
+    const opts = reduced
+      ? ({ duration: 0 } as const)
+      : ({ duration: 0.32, ease: [0.32, 0.72, 0, 1] } as const);
+
+    if (win.maximized) {
+      const layer = layerRect();
+      const el = sectionRef.current;
+      if (!layer || !el) return;
+      const r = el.getBoundingClientRect();
+      // posição visual real relativa ao layer (independe de x/y internos)
+      const visX = r.left - layer.left - tx.get();
+      const visY = r.top - layer.top - ty.get();
+      animate(tx, -visX, opts);
+      animate(ty, -visY, opts);
+      animate(w, layer.width, opts);
+      animate(h, layer.height - DOCK_GAP, opts);
+      animate(radius, 0, opts);
+
+      // acompanha resize da janela do navegador enquanto maximizada
+      const onResize = () => {
+        const lr = layerRect();
+        if (lr) {
+          w.set(lr.width);
+          h.set(lr.height - DOCK_GAP);
+        }
+      };
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }
+
+    animate(tx, 0, opts);
+    animate(ty, 0, opts);
+    animate(w, app.defaultSize.w, opts);
+    animate(h, app.defaultSize.h, opts);
+    animate(radius, 12, opts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [win.maximized]);
 
   const isFocused = focused === app.id;
   const AppComponent = app.component;
 
   return (
     <motion.section
-      layout
-      drag={!win.maximized}
+      ref={sectionRef}
+      // drag sempre ativo e SEM dragConstraints por ref: alternar a prop ou
+      // usar constraints re-medidas faz o motion auto-ajustar x/y quando a
+      // janela muda de tamanho (bug do maximizar). O início do arrasto já é
+      // bloqueado no header quando maximizada; os limites são aplicados no
+      // fim do gesto, como no macOS (janela pode sair pelas laterais, mas a
+      // barra de título nunca fica inalcançável).
+      drag
       dragListener={false}
       dragControls={dragControls}
       dragMomentum={false}
-      dragElastic={0.04}
-      dragConstraints={constraintsRef}
-      onDragEnd={commitDrag}
-      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92, translateY: 24 }}
+      dragElastic={0}
+      onDragEnd={() => {
+        const layer = constraintsRef.current?.getBoundingClientRect();
+        if (!layer) return;
+        const EDGE = 120; // mínimo da janela que permanece visível
+        const cx = Math.min(Math.max(x.get(), -(w.get() - EDGE)), layer.width - EDGE);
+        const cy = Math.min(Math.max(y.get(), 0), layer.height - 40);
+        if (cx !== x.get()) animate(x, cx, { duration: 0.2, ease: "easeOut" });
+        if (cy !== y.get()) animate(y, cy, { duration: 0.2, ease: "easeOut" });
+        setPos(app.id, { x: Math.round(cx), y: Math.round(cy) });
+      }}
+      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
       animate={
         win.minimized
           ? reduced
             ? { opacity: 0, transitionEnd: { visibility: "hidden" } }
-            : { opacity: 0, scale: 0.7, translateY: 280, transitionEnd: { visibility: "hidden" } }
-          : { opacity: 1, scale: 1, translateY: 0, visibility: "visible" }
+            : { opacity: 0, scale: 0.7, transitionEnd: { visibility: "hidden" } }
+          : { opacity: 1, scale: 1, visibility: "visible" }
       }
-      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92, translateY: 16 }}
+      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
       transition={{ duration: reduced ? 0.1 : 0.28, ease: [0.32, 0.72, 0, 1] }}
       onPointerDown={() => focusApp(app.id)}
       className={cn(
-        "window-surface pointer-events-auto absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
-        // Maximizada = zoom do macOS: ocupa da borda inferior da menu bar até a
-        // borda superior do dock (76px = 68px de dock + 8px de folga do fundo).
-        // fixed escapa do WindowLayer. Sem transform-none: o layout animation do
-        // motion anima o crescimento via transform (drag já zera o seu ao soltar).
-        win.maximized && "!fixed !inset-x-0 !top-8 !bottom-[76px] !h-auto !w-auto !rounded-none",
+        "window-surface pointer-events-auto absolute top-0 left-0 flex flex-col overflow-hidden shadow-2xl shadow-black/40",
         isFocused && "ring-1 ring-line-strong",
       )}
       style={{
         x,
         y,
-        left: basePos.x,
-        top: basePos.y,
-        width: app.defaultSize.w,
-        height: app.defaultSize.h,
-        maxWidth: win.maximized ? undefined : "calc(100vw - 24px)",
-        maxHeight: win.maximized ? undefined : "calc(100dvh - 7rem)",
-        // O WindowLayer (z-20) cria o stacking context: menu bar e dock (z-40)
-        // ficam sempre acima, mesmo com a janela maximizada.
+        translateX: tx,
+        translateY: ty,
+        width: w,
+        height: h,
+        borderRadius: radius,
+        maxWidth: "100%",
         zIndex: win.z,
       }}
       aria-label={t(app.titleKey)}

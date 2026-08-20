@@ -30,3 +30,21 @@
 | B3 | Vidro fora do tom Apple | Dock/menu bar/dropdowns/palette com tratamento Liquid Glass: blur 36-40px, saturate 1.9, highlight interno superior | Screenshots conferidos nos 2 temas |
 
 Observação: um frame com janela desfocada "clara" no tema escuro apareceu 1x durante o QA e não reproduziu (glitch de compositing do Chrome headless durante animação de tema; computed style estava correto).
+
+## Regressão — rework do drag de janelas (20/08, noite)
+
+Bug reportado: janelas tremiam durante o arrasto e, ao soltar, reanimavam da posição original até o ponto de soltura.
+
+Causa raiz: prop `layout` do Motion (usada para animar a maximização) reanimava a mudança de left/top que o commit do drag fazia ao soltar; além disso, `dragConstraints` por ref auto-ajustava x/y quando a janela mudava de tamanho, e alternar a prop `drag` no maximizar reinicializava o gesto com valores sujos.
+
+Fix: geometria 100% em motion values com canais separados (x/y exclusivos do drag; tx/ty/w/h/radius exclusivos da maximização, animados imperativamente com alvo medido do DOM); `drag` sempre ativo; sem `dragConstraints` — clamp próprio no fim do gesto (estilo macOS: janela sai pelas laterais, título nunca some).
+
+| Cenário | Evidência |
+|---|---|
+| Soltar = posição cravada, sem replay | amostragem 400ms pós-soltura: 1 única posição (290,224), deslocamento exato +180/+120 |
+| 3 drags encadeados | posição final exata (210,224) |
+| Maximizar após drags | left=0, top=32 (menu bar), largura=viewport, base no topo do dock |
+| Restaurar | volta ao pixel da posição arrastada |
+| Drag pós-restauro | delta exato 50,40 |
+| Clamp de topo | drag de -600px em y parou na borda da menu bar |
+| Fechar/reabrir/maximizar | posição persistida e maximização íntegra |
