@@ -133,18 +133,15 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
         <p className="mt-3 text-[13px] leading-relaxed text-text-lo">{t("welcome.tagline")}</p>
       </div>
 
-      {/* Grade de apps: sistema + sociais */}
-      <div className="mt-8 grid grid-cols-4 gap-x-4 gap-y-6">
-        {APPS.map((app) => (
-          <AppIcon key={app.id} id={app.id} size="grid" onOpen={onOpen} />
-        ))}
+      {/* Sociais: última linha da home, logo acima do dock */}
+      <div className="mt-auto mb-5 flex items-center justify-around px-4">
         {SOCIALS.map((social) => (
           <SocialIcon key={social.id} {...social} />
         ))}
       </div>
 
       {/* Dock mobile com os 4 apps do sistema */}
-      <div className="glass mt-auto flex items-center justify-around rounded-3xl px-4 py-3">
+      <div className="glass flex items-center justify-around rounded-3xl px-4 py-3">
         {APPS.map((app) => (
           <AppIcon key={app.id} id={app.id} size="dock" onOpen={onOpen} />
         ))}

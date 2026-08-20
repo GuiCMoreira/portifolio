@@ -42,12 +42,6 @@ export function MobileShell() {
     <div className="relative flex h-dvh w-full flex-col overflow-hidden">
       <Wallpaper />
 
-      {/* Dynamic Island */}
-      <div
-        aria-hidden
-        className="absolute top-[calc(env(safe-area-inset-top)+6px)] left-1/2 z-30 h-6 w-24 -translate-x-1/2 rounded-full bg-black"
-      />
-
       <div className="relative z-10 flex min-h-0 flex-1 flex-col pt-[env(safe-area-inset-top)]">
         <MobileStatusBar />
 
