@@ -26,6 +26,7 @@ const dict: Record<string, LocalizedText> = {
 
   // Apps (títulos)
   "apps.projects": { pt: "Projetos", en: "Projects" },
+  "apps.safari": { pt: "Safari", en: "Safari" },
   "apps.terminal": { pt: "Terminal", en: "Terminal" },
   "apps.about": { pt: "Sobre", en: "About" },
   "apps.contact": { pt: "Contato", en: "Contact" },
@@ -128,6 +129,41 @@ const dict: Record<string, LocalizedText> = {
   "clock.myTime": { pt: "Meu horário (Bragança Paulista)", en: "My time (Bragança Paulista, BR)" },
   "clock.available": { pt: "Disponível para novas oportunidades", en: "Open to new opportunities" },
   "clock.contact": { pt: "Entrar em contato", en: "Get in touch" },
+
+  // Safari
+  "safari.addressPlaceholder": { pt: "Digitar site ou endereço", en: "Enter website or address" },
+  "safari.start": { pt: "Página inicial", en: "Start page" },
+  "safari.back": { pt: "Voltar", en: "Back" },
+  "safari.forward": { pt: "Avançar", en: "Forward" },
+  "safari.reload": { pt: "Recarregar", en: "Reload" },
+  "safari.favorites": { pt: "Favoritos", en: "Favorites" },
+  "safari.myProjects": { pt: "Meus projetos", en: "My projects" },
+  "safari.myProjectsHint": {
+    pt: "abre no app Projetos — demos rodarão aqui dentro em breve",
+    en: "opens in the Projects app — live demos will run in here soon",
+  },
+  "safari.blockedTitle": {
+    pt: "não permite visualização embutida",
+    en: "doesn't allow embedded viewing",
+  },
+  "safari.blockedHint": {
+    pt: "É uma proteção do próprio site (X-Frame-Options). Dá para abrir em uma nova aba:",
+    en: "It's the site's own protection (X-Frame-Options). You can open it in a new tab:",
+  },
+  "safari.openNewTab": { pt: "Abrir em nova aba", en: "Open in new tab" },
+  "safari.iframeHint": {
+    pt: "Se a página ficar em branco, o site bloqueia visualização embutida.",
+    en: "If the page stays blank, the site blocks embedding.",
+  },
+  "safari.ghError": {
+    pt: "Não deu para carregar o GitHub agora (limite da API pública). Tente pelo site oficial:",
+    en: "Couldn't load GitHub right now (public API rate limit). Try the official site:",
+  },
+  "safari.ghOpen": { pt: "Ver no GitHub", en: "View on GitHub" },
+  "safari.ghRepos": { pt: "Repositórios recentes", en: "Recent repositories" },
+  "safari.ghFollowers": { pt: "seguidores", en: "followers" },
+  "safari.ghFollowing": { pt: "seguindo", en: "following" },
+  "safari.ghRepoCount": { pt: "repositórios", en: "repositories" },
 
   // Menu do sistema (logo G)
   "sysmenu.about": { pt: "Sobre o GuiOS", en: "About GuiOS" },

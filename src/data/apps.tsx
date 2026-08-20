@@ -1,6 +1,13 @@
 import type { AppId } from "@/lib/types";
-import { FinderIcon, MailIcon, NotesIcon, TerminalMacIcon } from "@/components/ui/app-icons";
+import {
+  FinderIcon,
+  MailIcon,
+  NotesIcon,
+  SafariIcon,
+  TerminalMacIcon,
+} from "@/components/ui/app-icons";
 import { ProjectsApp } from "@/components/apps/projects/ProjectsApp";
+import { SafariApp } from "@/components/apps/safari/SafariApp";
 import { TerminalApp } from "@/components/apps/terminal/TerminalApp";
 import { AboutApp } from "@/components/apps/about/AboutApp";
 import { ContactApp } from "@/components/apps/contact/ContactApp";
@@ -21,6 +28,13 @@ export const APPS: AppDefinition[] = [
     icon: FinderIcon,
     component: ProjectsApp,
     defaultSize: { w: 860, h: 560 },
+  },
+  {
+    id: "safari",
+    titleKey: "apps.safari",
+    icon: SafariIcon,
+    component: SafariApp,
+    defaultSize: { w: 900, h: 600 },
   },
   {
     id: "terminal",

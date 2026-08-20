@@ -26,6 +26,37 @@ export function FinderIcon({ className }: IconProps) {
   );
 }
 
+export function SafariIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <defs>
+        <linearGradient id="sfrBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f6f7f9" />
+          <stop offset="1" stopColor="#dfe2e8" />
+        </linearGradient>
+        <radialGradient id="sfrDial" cx="0.5" cy="0.25" r="1">
+          <stop offset="0" stopColor="#3fb9f5" />
+          <stop offset="1" stopColor="#1367e8" />
+        </radialGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#sfrBg)" />
+      <circle cx="32" cy="32" r="24" fill="url(#sfrDial)" />
+      {/* marcações do mostrador */}
+      <g stroke="rgba(255,255,255,0.85)" strokeWidth="1.6">
+        <path d="M32 10v4M32 50v4M10 32h4M50 32h4" />
+      </g>
+      <g stroke="rgba(255,255,255,0.5)" strokeWidth="1.2">
+        <path d="M47.6 16.4l-2.9 2.9M19.3 44.7l-2.9 2.9M47.6 47.6l-2.9-2.9M19.3 19.3l-2.9-2.9" />
+      </g>
+      {/* agulha da bússola */}
+      <g transform="rotate(45 32 32)">
+        <path d="M32 14l5 18h-10Z" fill="#ff3b30" />
+        <path d="M32 50l-5-18h10Z" fill="#ffffff" />
+      </g>
+    </svg>
+  );
+}
+
 export function TerminalMacIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>

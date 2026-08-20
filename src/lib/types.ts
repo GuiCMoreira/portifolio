@@ -1,4 +1,4 @@
-export type AppId = "projects" | "terminal" | "about" | "contact";
+export type AppId = "projects" | "safari" | "terminal" | "about" | "contact";
 
 export type Lang = "pt" | "en";
 

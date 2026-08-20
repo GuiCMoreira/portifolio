@@ -104,8 +104,13 @@ function WidgetDate() {
   );
 }
 
+// No mobile, o dock fica com os 4 apps principais; os demais (Safari) vão para a grade.
+const DOCK_IDS: AppId[] = ["projects", "terminal", "about", "contact"];
+
 export function MobileHome({ onOpen }: MobileHomeProps) {
   const { t } = useI18n();
+  const gridApps = APPS.filter((a) => !DOCK_IDS.includes(a.id));
+  const dockApps = DOCK_IDS.map((id) => APPS.find((a) => a.id === id)!);
 
   return (
     <div className="flex flex-1 flex-col px-6 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]">
@@ -133,6 +138,15 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
         <p className="mt-3 text-[13px] leading-relaxed text-text-lo">{t("welcome.tagline")}</p>
       </div>
 
+      {/* Apps fora do dock (Safari e futuros) */}
+      {gridApps.length > 0 && (
+        <div className="mt-8 grid grid-cols-4 gap-x-4 gap-y-6">
+          {gridApps.map((app) => (
+            <AppIcon key={app.id} id={app.id} size="grid" onOpen={onOpen} />
+          ))}
+        </div>
+      )}
+
       {/* Sociais: última linha da home, logo acima do dock */}
       <div className="mt-auto mb-5 flex items-center justify-around px-4">
         {SOCIALS.map((social) => (
@@ -140,9 +154,9 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
         ))}
       </div>
 
-      {/* Dock mobile com os 4 apps do sistema */}
+      {/* Dock mobile com os 4 apps principais */}
       <div className="glass flex items-center justify-around rounded-3xl px-4 py-3">
-        {APPS.map((app) => (
+        {dockApps.map((app) => (
           <AppIcon key={app.id} id={app.id} size="dock" onOpen={onOpen} />
         ))}
       </div>

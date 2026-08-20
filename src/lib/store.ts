@@ -4,13 +4,14 @@ import type { AppId, WindowState } from "./types";
 // Posições iniciais escalonadas para as janelas não nascerem empilhadas.
 const DEFAULT_POS: Record<AppId, { x: number; y: number }> = {
   projects: { x: 110, y: 72 },
+  safari: { x: 150, y: 60 },
   terminal: { x: 180, y: 130 },
   about: { x: 250, y: 96 },
   contact: { x: 320, y: 150 },
 };
 
 function initialWindows(): Record<AppId, WindowState> {
-  const ids: AppId[] = ["projects", "terminal", "about", "contact"];
+  const ids: AppId[] = ["projects", "safari", "terminal", "about", "contact"];
   return Object.fromEntries(
     ids.map((appId) => [
       appId,

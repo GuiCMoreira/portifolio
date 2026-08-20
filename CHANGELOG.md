@@ -27,3 +27,13 @@
 - **Sobre virou Notes**: sidebar de notas com seleção amarela (Sobre, Experiência, Stack & specs).
 - **Wallpaper fotográfico** P&B com grão (self-hosted), clareado/escurecido conforme o tema.
 - **Contato** ganhou card do Instagram.
+
+## [2.1.0] — 2026-08-20
+
+### Safari.app 🧭
+
+- Novo app **Safari**: barra de endereço com histórico real (voltar/avançar/recarregar), start page de favoritos e atalhos para os projetos em destaque.
+- **GitHub renderizado**: digitar github.com (ou clicar no favorito) mostra o perfil real do Gui via API pública — avatar, bio, seguidores e repositórios recentes com linguagem e stars (cache de sessão).
+- **Sites com iframe liberado** carregam dentro do navegador; sites que bloqueiam embed (LinkedIn, Instagram etc.) mostram página de bloqueio estilo Safari com botão "Abrir em nova aba".
+- Preparado para rodar demos dos projetos embutidas quando forem hospedadas.
+- Ícone de bússola estilo macOS; no mobile o Safari entra na grade da home.
