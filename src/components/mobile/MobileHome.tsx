@@ -14,7 +14,12 @@ import {
 } from "@/components/ui/app-icons";
 
 interface MobileHomeProps {
-  onOpen: (id: AppId) => void;
+  onOpen: (id: AppId, originLayoutId: string) => void;
+}
+
+/** id compartilhado entre o ícone e a MobileAppView para o morph de abertura */
+export function appOriginLayoutId(origin: "grid" | "dock", id: AppId) {
+  return `mob-${origin}-${id}`;
 }
 
 function AppIcon({
@@ -24,22 +29,29 @@ function AppIcon({
 }: {
   id: AppId;
   size: "grid" | "dock";
-  onOpen: (id: AppId) => void;
+  onOpen: (id: AppId, originLayoutId: string) => void;
 }) {
   const { t } = useI18n();
   const app = getApp(id);
   const Icon = app.icon;
   const tile = size === "grid" ? "h-16 w-16" : "h-14 w-14";
+  const layoutId = appOriginLayoutId(size, id);
 
   return (
     <motion.button
       type="button"
-      onClick={() => onOpen(id)}
+      onClick={() => onOpen(id, layoutId)}
       whileTap={{ scale: 0.9 }}
       className="flex flex-col items-center gap-1.5"
       aria-label={t(app.titleKey)}
     >
-      <Icon className={`${tile} drop-shadow-lg`} />
+      <motion.span
+        layoutId={layoutId}
+        style={{ borderRadius: 16 }}
+        className={`block overflow-hidden ${tile}`}
+      >
+        <Icon className="h-full w-full drop-shadow-lg" />
+      </motion.span>
       {size === "grid" && <span className="text-[11px] text-text-hi/85">{t(app.titleKey)}</span>}
     </motion.button>
   );

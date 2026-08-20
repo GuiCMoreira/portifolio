@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { AnimatePresence } from "motion/react";
+import type { AppId } from "@/lib/types";
 import { Wallpaper } from "@/components/os/Wallpaper";
 import { CommandPalette } from "@/components/os/CommandPalette";
 import { MobileStatusBar } from "./MobileStatusBar";
@@ -24,6 +26,17 @@ export function MobileShell() {
 
   const activeApp =
     focused && windows[focused].open && !windows[focused].minimized ? focused : null;
+
+  // Ícone de origem do último toque — habilita o morph "app cresce do ícone".
+  // Aberturas sem toque (terminal, palette) ficam sem origem e usam o zoom padrão.
+  const [origin, setOrigin] = useState<{ app: AppId; layoutId: string } | null>(null);
+
+  const openFromIcon = (id: AppId, originLayoutId: string) => {
+    setOrigin({ app: id, layoutId: originLayoutId });
+    openApp(id);
+  };
+
+  const originLayoutId = activeApp && origin?.app === activeApp ? origin.layoutId : undefined;
 
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden">
@@ -68,11 +81,16 @@ export function MobileShell() {
           </div>
         )}
 
-        <MobileHome onOpen={openApp} />
+        <MobileHome onOpen={openFromIcon} />
 
         <AnimatePresence>
           {activeApp && (
-            <MobileAppView key={activeApp} appId={activeApp} onClose={() => closeApp(activeApp)} />
+            <MobileAppView
+              key={activeApp}
+              appId={activeApp}
+              originLayoutId={originLayoutId}
+              onClose={() => closeApp(activeApp)}
+            />
           )}
         </AnimatePresence>
       </div>
