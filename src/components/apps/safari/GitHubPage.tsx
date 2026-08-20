@@ -56,9 +56,13 @@ function useGitHubProfile(): GhState {
     if (cached) {
       try {
         const parsed = JSON.parse(cached) as { user: GhUser; repos: GhRepo[] };
-        // microtask: mantém o setState assíncrono em relação ao effect
-        Promise.resolve().then(() => apply({ status: "ok", ...parsed }));
-        return;
+        // tempo mínimo de skeleton: com cache a página abria num piscar,
+        // sem parecer um navegador carregando de verdade
+        const id = setTimeout(() => apply({ status: "ok", ...parsed }), 700);
+        return () => {
+          cancelled = true;
+          clearTimeout(id);
+        };
       } catch {
         // cache corrompido — segue para o fetch
       }

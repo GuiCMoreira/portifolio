@@ -34,8 +34,12 @@ function useRepo(name: string): RepoState {
     if (cached) {
       try {
         const parsed = JSON.parse(cached) as { repo: RepoInfo; readme: string | null };
-        Promise.resolve().then(() => apply({ status: "ok", ...parsed }));
-        return;
+        // tempo mínimo de skeleton, como um navegador carregando de verdade
+        const id = setTimeout(() => apply({ status: "ok", ...parsed }), 700);
+        return () => {
+          cancelled = true;
+          clearTimeout(id);
+        };
       } catch {
         // cache corrompido — segue para o fetch
       }

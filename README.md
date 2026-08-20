@@ -47,6 +47,12 @@ Roteiro de QA executado em [docs/qa/](docs/qa/). Spec e plano de implementação
 
 Pensado para a [Vercel](https://vercel.com): basta importar o repositório — zero configuração extra.
 
+## Créditos
+
+- Ícone da Lixeira: [WhiteSur icon theme](https://github.com/vinceliuice/WhiteSur-icon-theme) (GPL-3), de Vince Liuice.
+- Wallpapers: [Lorem Picsum](https://picsum.photos/) (fotos do Unsplash).
+- Demais ícones de apps: recriações próprias em SVG.
+
 ## Acessibilidade
 
 - `prefers-reduced-motion` respeitado (boot, janelas, mobile)

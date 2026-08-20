@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Battery, BatteryCharging, BatteryLow, Moon, Search, Sun, Wifi, WifiOff } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
@@ -45,6 +46,35 @@ function Clock() {
 interface MenuDef {
   labelKey: string;
   items: { labelKey: string; action: () => void }[];
+}
+
+// Painel animado dos popovers/menus da barra: abre com scale+fade a partir
+// do topo e fecha suavemente (AnimatePresence cuida da saída).
+function PopPanel({
+  align = "right",
+  className,
+  children,
+}: {
+  align?: "left" | "right";
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.94, y: -6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: -4 }}
+      transition={{ duration: 0.16, ease: "easeOut" }}
+      className={cn(
+        "glass-heavy absolute top-7 z-50 shadow-2xl shadow-black/25",
+        align === "right" ? "right-0 origin-top-right" : "left-0 origin-top-left",
+        className,
+      )}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 function MenuSeparator() {
@@ -102,11 +132,9 @@ function StatusItem({
       >
         {icon}
       </button>
-      {openMenu === id && (
-        <div className="glass-heavy absolute top-7 right-0 z-50 rounded-xl shadow-2xl shadow-black/25">
-          {children}
-        </div>
-      )}
+      <AnimatePresence>
+        {openMenu === id && <PopPanel className="rounded-xl">{children}</PopPanel>}
+      </AnimatePresence>
     </div>
   );
 }
@@ -212,8 +240,9 @@ export function MenuBar() {
               G
             </span>
           </button>
+          <AnimatePresence>
           {openMenu === "system" && (
-            <div className="glass-heavy absolute top-7 left-0 z-50 min-w-60 rounded-lg p-1 shadow-2xl shadow-black/25">
+            <PopPanel align="left" className="min-w-60 rounded-lg p-1">
               <SystemMenuItem label={t("sysmenu.about")} onAction={() => act(() => setSystemDialog("about"))} />
               <MenuSeparator />
               <SystemMenuItem label={t("sysmenu.settings")} onAction={() => act(() => setSystemDialog("settings"))} />
@@ -248,8 +277,9 @@ export function MenuBar() {
                 shortcut="⇧⌘Q"
                 onAction={() => act(() => openApp("contact"))}
               />
-            </div>
+            </PopPanel>
           )}
+          </AnimatePresence>
         </div>
         <span className="px-2 text-[13px] font-bold text-text-hi">{focusedTitle}</span>
 
@@ -267,23 +297,25 @@ export function MenuBar() {
             >
               {t(menu.labelKey)}
             </button>
-            {openMenu === menu.labelKey && (
-              <div className="glass-heavy absolute top-7 left-0 z-50 min-w-44 rounded-lg p-1 shadow-2xl shadow-black/25">
-                {menu.items.map((item) => (
-                  <button
-                    key={item.labelKey}
-                    type="button"
-                    onClick={() => {
-                      item.action();
-                      setOpenMenu(null);
-                    }}
-                    className="block w-full rounded-md px-3 py-1 text-left text-[13px] text-text-hi hover:bg-accent hover:text-white"
-                  >
-                    {t(item.labelKey)}
-                  </button>
-                ))}
-              </div>
-            )}
+            <AnimatePresence>
+              {openMenu === menu.labelKey && (
+                <PopPanel align="left" className="min-w-44 rounded-lg p-1">
+                  {menu.items.map((item) => (
+                    <button
+                      key={item.labelKey}
+                      type="button"
+                      onClick={() => {
+                        item.action();
+                        setOpenMenu(null);
+                      }}
+                      className="block w-full rounded-md px-3 py-1 text-left text-[13px] text-text-hi hover:bg-accent hover:text-white"
+                    >
+                      {t(item.labelKey)}
+                    </button>
+                  ))}
+                </PopPanel>
+              )}
+            </AnimatePresence>
           </div>
         ))}
       </div>
@@ -366,11 +398,13 @@ export function MenuBar() {
           >
             <Clock />
           </button>
-          {openMenu === "clock" && (
-            <div className="glass-heavy absolute top-7 right-0 z-50 rounded-xl shadow-2xl shadow-black/25">
-              <ClockPopover onClose={() => setOpenMenu(null)} />
-            </div>
-          )}
+          <AnimatePresence>
+            {openMenu === "clock" && (
+              <PopPanel className="rounded-xl">
+                <ClockPopover onClose={() => setOpenMenu(null)} />
+              </PopPanel>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </header>

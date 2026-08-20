@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -147,6 +148,8 @@ export function SafariApp() {
   });
   const [address, setAddress] = useState("");
   const [frameKey, setFrameKey] = useState(0);
+  // incrementa a cada navegação — reinicia a barra de progresso do toolbar
+  const [navTick, setNavTick] = useState(0);
 
   const page = nav.stack[nav.index];
 
@@ -159,6 +162,7 @@ export function SafariApp() {
       return { stack, index: stack.length - 1 };
     });
     setAddress(displayUrl(next));
+    setNavTick((n) => n + 1);
   };
 
   const navigateInput = (input: string) => navigateTo(resolveInput(input));
@@ -177,8 +181,10 @@ export function SafariApp() {
 
   const go = (delta: number) => {
     const next = Math.min(Math.max(nav.index + delta, 0), nav.stack.length - 1);
+    if (next === nav.index) return;
     setNav((prev) => ({ ...prev, index: Math.min(next, prev.stack.length - 1) }));
     setAddress(displayUrl(nav.stack[next]));
+    setNavTick((n) => n + 1);
   };
 
   return (
@@ -238,6 +244,18 @@ export function SafariApp() {
           <RotateCw className="h-3.5 w-3.5" />
         </button>
       </div>
+
+      {/* Barra de progresso de carregamento, como no Safari real */}
+      {navTick > 0 && (
+        <motion.div
+          key={navTick}
+          initial={{ scaleX: 0, opacity: 1 }}
+          animate={{ scaleX: [0, 0.7, 1], opacity: [1, 1, 0] }}
+          transition={{ duration: 0.9, times: [0, 0.55, 1], ease: "easeOut" }}
+          className="h-0.5 shrink-0 origin-left bg-accent"
+          aria-hidden
+        />
+      )}
 
       {/* Conteúdo */}
       <div className={cn("os-scroll min-h-0 flex-1", page.kind !== "web" && "overflow-y-auto")}>
