@@ -1,6 +1,8 @@
 "use client";
 
-import { Lock, Rocket, Wifi, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
+import { Lock, Rocket, Zap } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useOSStore } from "@/lib/store";
 import { useBattery, useConnectionType, useOnline } from "@/lib/hooks";
@@ -8,12 +10,58 @@ import { cn } from "@/lib/utils";
 
 // ---------- Wi-Fi ----------
 
-const FAKE_NETWORKS = ["CAFÉ_5G", "NAO_CLIQUE_AQUI", "Vizinho_Desconfiado", "Van_de_Vigilancia 👀"];
+// Sinal enfraquece lista abaixo, como num scan de verdade.
+const FAKE_NETWORKS: { name: string; strength: 1 | 2 | 3 }[] = [
+  { name: "CAFÉ_5G", strength: 3 },
+  { name: "NAO_CLIQUE_AQUI", strength: 2 },
+  { name: "Vizinho_Desconfiado", strength: 2 },
+  { name: "Van_de_Vigilancia 👀", strength: 1 },
+];
+
+// Ícone de Wi-Fi com intensidade: arcos inativos ficam esmaecidos.
+function WifiStrength({ strength, className }: { strength: 0 | 1 | 2 | 3; className?: string }) {
+  const arc = (active: boolean) => (active ? "1" : "0.22");
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      className={className}
+      aria-hidden
+    >
+      <circle cx="12" cy="18.5" r="1.4" fill="currentColor" stroke="none" />
+      <path d="M8.5 15a5 5 0 0 1 7 0" opacity={arc(strength >= 1)} />
+      <path d="M5 11.5a10 10 0 0 1 14 0" opacity={arc(strength >= 2)} />
+      <path d="M1.8 8a15 15 0 0 1 20.4 0" opacity={arc(strength >= 3)} />
+    </svg>
+  );
+}
+
+// Revela as redes em levas, como um scan: 2 de cara, depois +1, +1…
+function useWifiScan(total: number): number {
+  const [visible, setVisible] = useState(0);
+
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => setVisible(2), 350),
+      ...Array.from({ length: Math.max(0, total - 2) }, (_, i) =>
+        setTimeout(() => setVisible(3 + i), 900 + i * 550),
+      ),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [total]);
+
+  return visible;
+}
 
 export function WifiPopover() {
   const { t } = useI18n();
   const online = useOnline();
   const connType = useConnectionType();
+  const visible = useWifiScan(FAKE_NETWORKS.length);
+  const scanning = visible < FAKE_NETWORKS.length;
 
   return (
     <div className="w-64 p-3">
@@ -31,26 +79,37 @@ export function WifiPopover() {
         </span>
       </div>
 
-      {/* Rede "conectada" */}
+      {/* Rede "conectada" — aparece na hora, já estamos nela */}
       <div className="mt-3 flex items-center gap-2 rounded-lg bg-accent/15 px-2.5 py-1.5">
-        <Wifi className="h-3.5 w-3.5 text-accent" />
+        <WifiStrength strength={3} className="h-4 w-4 text-accent" />
         <span className="text-[12px] font-medium text-text-hi">Internet do Gui</span>
         <span className="ml-auto text-[11px] text-accent">✓</span>
       </div>
 
-      <p className="mt-3 px-1 font-mono text-[10px] tracking-widest text-text-lo/70 uppercase">
+      <p className="mt-3 flex items-center gap-2 px-1 font-mono text-[10px] tracking-widest text-text-lo/70 uppercase">
         {t("wifi.otherNetworks")}
+        {scanning && (
+          <motion.span
+            className="h-2.5 w-2.5 rounded-full border border-text-lo/40 border-t-accent"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
+            aria-label="scanning"
+          />
+        )}
       </p>
-      <ul className="mt-1 space-y-0.5">
-        {FAKE_NETWORKS.map((net) => (
-          <li
-            key={net}
+      <ul className="mt-1 min-h-[7.5rem] space-y-0.5">
+        {FAKE_NETWORKS.slice(0, visible).map((net) => (
+          <motion.li
+            key={net.name}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[12px] text-text-lo"
           >
-            <Wifi className="h-3.5 w-3.5 opacity-60" />
-            {net}
+            <WifiStrength strength={net.strength} className="h-4 w-4" />
+            {net.name}
             <Lock className="ml-auto h-3 w-3 opacity-50" />
-          </li>
+          </motion.li>
         ))}
       </ul>
     </div>
