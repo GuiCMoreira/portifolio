@@ -75,10 +75,10 @@ export function Window({ app, constraintsRef }: WindowProps) {
       onPointerDown={() => focusApp(app.id)}
       className={cn(
         "window-surface absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
-        // Maximizada = zoom do macOS: ocupa a tela ABAIXO da menu bar (traffic
-        // lights visíveis); o dock continua por cima, como no Mac real.
-        // fixed escapa do WindowLayer (que desconta menu bar/dock do espaço útil).
-        win.maximized && "!fixed !inset-x-0 !top-8 !bottom-0 !h-auto !w-auto !transform-none !rounded-none",
+        // Maximizada = zoom do macOS: ocupa da borda inferior da menu bar até a
+        // borda superior do dock (76px = 68px de dock + 8px de folga do fundo).
+        // fixed escapa do WindowLayer.
+        win.maximized && "!fixed !inset-x-0 !top-8 !bottom-[76px] !h-auto !w-auto !transform-none !rounded-none",
         isFocused && "ring-1 ring-line-strong",
       )}
       style={{
