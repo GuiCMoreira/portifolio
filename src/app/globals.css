@@ -90,6 +90,12 @@ body {
   -webkit-backdrop-filter: blur(40px) saturate(1.9);
 }
 
+/* Variante para barras encostadas na borda da tela (menu bar): o highlight
+   interno do Liquid Glass viraria uma linha clara na borda do viewport. */
+.glass-bar {
+  box-shadow: none;
+}
+
 /* Janelas de app: fundo SÓLIDO — conteúdo nunca vaza por trás. */
 .window-surface {
   background: var(--window-solid);

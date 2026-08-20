@@ -100,7 +100,7 @@ export function MenuBar() {
   return (
     <header
       ref={barRef}
-      className="glass fixed inset-x-0 top-0 z-40 flex h-8 items-center justify-between border-x-0 border-t-0 px-3"
+      className="glass glass-bar fixed inset-x-0 top-0 z-40 flex h-8 items-center justify-between border-x-0 border-t-0 px-3"
     >
       <div className="flex items-center gap-1">
         {/* logo do sistema, no lugar da maçã */}
