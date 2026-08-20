@@ -7,6 +7,7 @@ import { useIsMobile } from "@/lib/hooks";
 import { storageGet, storageSet } from "@/lib/safe-storage";
 import { BootScreen } from "./BootScreen";
 import { Desktop } from "./Desktop";
+import { PowerOverlay } from "./PowerOverlay";
 import { MobileShell } from "@/components/mobile/MobileShell";
 
 const BOOT_FLAG = "guios.booted";
@@ -38,6 +39,7 @@ export function GuiOS() {
     <>
       {isMobile ? <MobileShell /> : <Desktop />}
       <AnimatePresence>{!booted && <BootScreen onDone={finishBoot} />}</AnimatePresence>
+      <PowerOverlay />
     </>
   );
 }

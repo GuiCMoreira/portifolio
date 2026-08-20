@@ -128,6 +128,29 @@ const dict: Record<string, LocalizedText> = {
   "clock.myTime": { pt: "Meu horário (Bragança Paulista)", en: "My time (Bragança Paulista, BR)" },
   "clock.available": { pt: "Disponível para novas oportunidades", en: "Open to new opportunities" },
   "clock.contact": { pt: "Entrar em contato", en: "Get in touch" },
+
+  // Menu do sistema (logo G)
+  "sysmenu.about": { pt: "Sobre o GuiOS", en: "About GuiOS" },
+  "sysmenu.settings": { pt: "Ajustes…", en: "Settings…" },
+  "sysmenu.recent": { pt: "Itens recentes", en: "Recent items" },
+  "sysmenu.recentEmpty": { pt: "Nenhum item recente", en: "No recent items" },
+  "sysmenu.forceQuit": { pt: "Forçar Encerrar Tudo", en: "Force Quit All" },
+  "sysmenu.sleep": { pt: "Repouso", en: "Sleep" },
+  "sysmenu.restart": { pt: "Reiniciar…", en: "Restart…" },
+  "sysmenu.shutdown": { pt: "Desligar…", en: "Shut Down…" },
+  "sysmenu.logout": { pt: "Finalizar Sessão de Visitante…", en: "Log Out Visitor…" },
+  "sysmenu.version": { pt: "Versão 2.0 (build 2026)", en: "Version 2.0 (build 2026)" },
+  "sysmenu.sourceCode": { pt: "Código-fonte deste Mac", en: "This Mac's source code" },
+  "sysmenu.poweredOff": { pt: "GuiOS foi desligado", en: "GuiOS is powered off" },
+  "sysmenu.powerOn": { pt: "Ligar", en: "Power on" },
+  "sysmenu.sleeping": { pt: "Em repouso — toque para acordar", en: "Sleeping — tap to wake" },
+
+  // Ajustes
+  "settings.title": { pt: "Ajustes do Sistema", en: "System Settings" },
+  "settings.appearance": { pt: "Aparência", en: "Appearance" },
+  "settings.light": { pt: "Claro", en: "Light" },
+  "settings.dark": { pt: "Escuro", en: "Dark" },
+  "settings.language": { pt: "Idioma", en: "Language" },
 };
 
 interface I18nValue {

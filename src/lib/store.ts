@@ -36,12 +36,19 @@ function nextFocus(windows: Record<AppId, WindowState>, closing: AppId): AppId |
   return candidates.reduce((top, w) => (w.z > top.z ? w : top)).appId;
 }
 
+export type PowerState = "on" | "sleep" | "off";
+export type SystemDialog = "about" | "settings" | null;
+
 interface OSStore {
   windows: Record<AppId, WindowState>;
   focused: AppId | null;
   zTop: number;
   booted: boolean;
   paletteOpen: boolean;
+  powerState: PowerState;
+  systemDialog: SystemDialog;
+  /** últimos apps abertos na sessão (mais recente primeiro) */
+  recent: AppId[];
   openApp: (id: AppId, payload?: string) => void;
   closeApp: (id: AppId) => void;
   minimizeApp: (id: AppId) => void;
@@ -51,6 +58,9 @@ interface OSStore {
   clearPayload: (id: AppId) => void;
   setBooted: (b: boolean) => void;
   setPaletteOpen: (open: boolean) => void;
+  setPowerState: (s: PowerState) => void;
+  setSystemDialog: (d: SystemDialog) => void;
+  closeAll: () => void;
 }
 
 export const useOSStore = create<OSStore>((set) => ({
@@ -59,6 +69,9 @@ export const useOSStore = create<OSStore>((set) => ({
   zTop: 1,
   booted: false,
   paletteOpen: false,
+  powerState: "on",
+  systemDialog: null,
+  recent: [],
 
   openApp: (id, payload) =>
     set((s) => ({
@@ -75,6 +88,7 @@ export const useOSStore = create<OSStore>((set) => ({
       },
       zTop: s.zTop + 1,
       focused: id,
+      recent: [id, ...s.recent.filter((r) => r !== id)].slice(0, 4),
     })),
 
   closeApp: (id) =>
@@ -128,4 +142,9 @@ export const useOSStore = create<OSStore>((set) => ({
 
   setBooted: (b) => set({ booted: b }),
   setPaletteOpen: (open) => set({ paletteOpen: open }),
+  setPowerState: (s) => set({ powerState: s }),
+  setSystemDialog: (d) => set({ systemDialog: d }),
+
+  closeAll: () =>
+    set(() => ({ windows: initialWindows(), focused: null })),
 }));
