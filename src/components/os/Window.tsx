@@ -74,7 +74,7 @@ export function Window({ app, constraintsRef }: WindowProps) {
       transition={{ duration: reduced ? 0.1 : 0.28, ease: [0.32, 0.72, 0, 1] }}
       onPointerDown={() => focusApp(app.id)}
       className={cn(
-        "window-surface absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
+        "window-surface pointer-events-auto absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
         // Maximizada = zoom do macOS: ocupa da borda inferior da menu bar até a
         // borda superior do dock (76px = 68px de dock + 8px de folga do fundo).
         // fixed escapa do WindowLayer. Sem transform-none: o layout animation do
