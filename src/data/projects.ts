@@ -2,6 +2,7 @@ import type { Project } from "@/lib/types";
 
 export const GITHUB_URL = "https://github.com/GuiCMoreira";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/guilherme-de-carvalho-moreira/";
+export const INSTAGRAM_URL = "https://www.instagram.com/_guic_m/";
 export const AVATAR_URL = "https://avatars.githubusercontent.com/u/142915547?v=4";
 export const EMAIL = "guicarvalhomoreira@gmail.com"; // REVISAR: confirmar e-mail público preferido
 

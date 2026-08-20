@@ -82,11 +82,7 @@ export function CommandPalette() {
                     const Icon = app.icon;
                     return (
                       <Command.Item key={app.id} onSelect={() => run(() => openApp(app.id))}>
-                        <span
-                          className={`flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br ${app.gradient}`}
-                        >
-                          <Icon className="h-3.5 w-3.5 text-white" />
-                        </span>
+                        <Icon className="h-6 w-6" />
                         {t(app.titleKey)}
                       </Command.Item>
                     );
