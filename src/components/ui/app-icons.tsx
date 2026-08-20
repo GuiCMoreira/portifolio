@@ -28,17 +28,22 @@ export function FinderIcon({ className }: IconProps) {
 
 export function SafariIcon({ className }: IconProps) {
   // Ícone original do tema WhiteSur (GPL-3, crédito no README).
-  // O asset preenche o arquivo até a borda; o scale alinha com os vizinhos.
+  // Squircle branco em tamanho cheio (desenhado aqui) + bússola encolhida
+  // dentro: o fundo branco do próprio asset some contra o nosso.
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src="/app-safari.svg"
-      alt=""
-      className={className}
-      style={{ transform: "scale(0.92)" }}
-      draggable={false}
+    <span
+      className={`relative block overflow-hidden rounded-[22%] bg-white ring-1 ring-black/10 ${className ?? ""}`}
       aria-hidden
-    />
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/app-safari.svg"
+        alt=""
+        className="h-full w-full"
+        style={{ transform: "scale(0.86)" }}
+        draggable={false}
+      />
+    </span>
   );
 }
 
