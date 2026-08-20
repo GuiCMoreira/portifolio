@@ -110,7 +110,7 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
   return (
     <div className="flex flex-1 flex-col px-6 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]">
       {/* Widget de identidade, como um widget de tela inicial */}
-      <div className="glass mt-4 rounded-3xl p-5">
+      <div className="glass rounded-3xl p-5">
         <WidgetDate />
         <div className="mt-2 flex items-center gap-3">
           <Image
