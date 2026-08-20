@@ -34,3 +34,8 @@ CLAUDE.md
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# arquivos alheios ao projeto
+*Zone.Identifier
+*.html:Zone.Identifier
+Landing Altec*

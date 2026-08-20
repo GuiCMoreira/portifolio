@@ -138,20 +138,58 @@ export function TrashIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>
       <defs>
-        <linearGradient id="trsh" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#eceef1" />
-          <stop offset="1" stopColor="#c3c8d1" />
+        <linearGradient id="trshBody" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#eef0f4" stopOpacity="0.92" />
+          <stop offset="0.5" stopColor="#d5d9e0" stopOpacity="0.82" />
+          <stop offset="1" stopColor="#b6bcc7" stopOpacity="0.9" />
         </linearGradient>
+        <linearGradient id="trshRim" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fafbfc" />
+          <stop offset="1" stopColor="#c2c7d0" />
+        </linearGradient>
+        <radialGradient id="trshMouth" cx="0.5" cy="0.4" r="0.9">
+          <stop offset="0" stopColor="#878d99" />
+          <stop offset="1" stopColor="#565b66" />
+        </radialGradient>
       </defs>
-      {/* cesto aramado estilo macOS */}
-      <path d="M18 16h28l-3.5 36a4 4 0 0 1-4 3.6h-13a4 4 0 0 1-4-3.6Z" fill="url(#trsh)" />
-      <path d="M18 16h28l-3.5 36a4 4 0 0 1-4 3.6h-13a4 4 0 0 1-4-3.6Z" fill="none" stroke="#9aa1ad" strokeWidth="1.6" />
-      <g stroke="#9aa1ad" strokeWidth="1.4" opacity="0.8">
-        <path d="M23 20l2.4 31M32 20v31M41 20l-2.4 31" />
-        <path d="M19.5 26h25M20.4 35h23.2M21.3 44h21.4" />
+
+      {/* corpo afunilado, fosco e translúcido como no macOS */}
+      <path
+        d="M11 16 L16.5 52 Q17.3 57.5 23 57.5 H41 Q46.7 57.5 47.5 52 L53 16 Z"
+        fill="url(#trshBody)"
+      />
+      {/* frisos verticais convergentes */}
+      <g strokeLinecap="round" fill="none">
+        <g stroke="#9ba2ae" strokeWidth="1.3" opacity="0.75">
+          <path d="M17 18 L21.5 55" />
+          <path d="M24.5 18 L27 55.5" />
+          <path d="M32 18 L32 55.5" />
+          <path d="M39.5 18 L37 55.5" />
+          <path d="M47 18 L42.5 55" />
+        </g>
+        <g stroke="#ffffff" strokeWidth="1.1" opacity="0.8">
+          <path d="M18.3 18 L22.7 55" />
+          <path d="M25.8 18 L28.2 55.5" />
+          <path d="M33.3 18 L33.2 55.5" />
+          <path d="M40.8 18 L38.2 55.5" />
+          <path d="M48.2 18 L43.7 55" />
+        </g>
       </g>
-      <rect x="15" y="12" width="34" height="5" rx="2.5" fill="#d6dae0" stroke="#9aa1ad" strokeWidth="1.4" />
-      <path d="M27 12a5 5 0 0 1 10 0" fill="none" stroke="#9aa1ad" strokeWidth="1.8" />
+      {/* sombra interna na base */}
+      <path
+        d="M18 48 Q32 52.5 46 48 L47.5 52 Q46.7 57.5 41 57.5 H23 Q17.3 57.5 16.5 52 Z"
+        fill="#8f96a2"
+        opacity="0.25"
+      />
+
+      {/* boca escura */}
+      <ellipse cx="32" cy="15" rx="19" ry="4.6" fill="url(#trshMouth)" />
+      {/* aro metálico */}
+      <path
+        d="M32 8.6c-12.7 0-23 2.8-23 6.4s10.3 6.4 23 6.4 23-2.8 23-6.4-10.3-6.4-23-6.4Zm0 2.6c9.9 0 18 1.9 18 4s-8.1 4-18 4-18-1.9-18-4 8.1-4 18-4Z"
+        fill="url(#trshRim)"
+      />
+      <ellipse cx="32" cy="15" rx="23" ry="6.4" fill="none" stroke="#9aa1ad" strokeWidth="0.8" opacity="0.6" />
     </svg>
   );
 }
