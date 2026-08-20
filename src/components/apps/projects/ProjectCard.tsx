@@ -30,7 +30,7 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
     <button
       type="button"
       onClick={() => onOpen(project.id)}
-      className="group flex flex-col overflow-hidden rounded-xl border border-white/8 bg-white/[0.03] text-left transition-all hover:border-white/15 hover:bg-white/[0.06]"
+      className="group flex flex-col overflow-hidden rounded-xl border border-line bg-inset text-left transition-all hover:border-line-strong hover:bg-fill-1"
     >
       <div
         className={`flex h-24 items-center justify-center bg-gradient-to-br ${tileGradient(project.id)}`}
@@ -49,7 +49,7 @@ export function ProjectCard({ project, onOpen }: ProjectCardProps) {
           {project.stack.slice(0, 3).map((tech) => (
             <span
               key={tech}
-              className="rounded bg-white/6 px-1.5 py-0.5 font-mono text-[10px] text-text-lo"
+              className="rounded bg-fill-2 px-1.5 py-0.5 font-mono text-[10px] text-text-lo"
             >
               {tech}
             </span>

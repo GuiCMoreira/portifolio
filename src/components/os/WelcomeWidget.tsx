@@ -51,12 +51,12 @@ export function WelcomeWidget() {
         <button
           type="button"
           onClick={() => openApp("projects")}
-          className="rounded-xl bg-accent px-5 py-2.5 text-[13px] font-semibold text-ink transition-transform hover:scale-[1.03] active:scale-[0.98]"
+          className="rounded-xl bg-accent px-5 py-2.5 text-[13px] font-semibold text-white transition-transform hover:scale-[1.03] active:scale-[0.98]"
         >
           {t("welcome.cta")}
         </button>
         <span className="text-[12px] text-text-lo">
-          {t("welcome.orPress")} <kbd className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[11px]">⌘K</kbd>
+          {t("welcome.orPress")} <kbd className="rounded bg-fill-2 px-1.5 py-0.5 font-mono text-[11px]">⌘K</kbd>
         </span>
       </div>
     </motion.section>

@@ -57,7 +57,7 @@ export function ProjectsApp() {
   return (
     <div className="flex h-full flex-col md:flex-row">
       {/* Sidebar estilo Finder (vira chips horizontais em telas estreitas) */}
-      <aside className="os-scroll flex shrink-0 gap-0.5 overflow-x-auto border-b border-white/5 bg-black/20 p-2 md:w-44 md:flex-col md:overflow-x-visible md:border-r md:border-b-0">
+      <aside className="os-scroll flex shrink-0 gap-0.5 overflow-x-auto border-b border-line bg-inset p-2 md:w-44 md:flex-col md:overflow-x-visible md:border-r md:border-b-0">
         {CATEGORIES.map((cat) => {
           const Icon = cat.icon;
           const count = filterByCategory(cat.id).length;

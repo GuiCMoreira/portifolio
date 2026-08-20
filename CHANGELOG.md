@@ -15,3 +15,15 @@
 - **i18n**: PT-BR/EN com detecção automática e persistência.
 - **A11y/SEO**: prefers-reduced-motion, foco visível, metadata OpenGraph completa, favicon próprio.
 - **QA**: roteiro com 32 cenários executados — 32 PASS.
+
+## [2.0.0] — 2026-08-20
+
+### Re-skin macOS autêntico
+
+- **Tema duplo**: claro e escuro, seguindo a preferência do sistema, com toggle na menu bar (e no mobile). Tokens semânticos de cor em todo o app.
+- **Menu bar fiel ao macOS**: logo, nome do app em negrito, menus "Arquivo" e "Ajuda" funcionais, Wi-Fi/bateria/busca, data e hora no formato do Mac.
+- **Dock estilo macOS**: efeito magnification com vizinhança, separador vertical, bounce ao abrir e tooltips; ícones de GitHub, LinkedIn e Instagram para acesso rápido.
+- **Ícones estilo Apple**: Finder (Projetos), Terminal, Notes (Sobre) e Mail (Contato) — recriações próprias em SVG.
+- **Sobre virou Notes**: sidebar de notas com seleção amarela (Sobre, Experiência, Stack & specs).
+- **Wallpaper fotográfico** P&B com grão (self-hosted), clareado/escurecido conforme o tema.
+- **Contato** ganhou card do Instagram.

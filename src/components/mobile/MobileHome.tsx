@@ -23,7 +23,7 @@ function AppIcon({
   const { t } = useI18n();
   const app = getApp(id);
   const Icon = app.icon;
-  const tile = size === "grid" ? "h-16 w-16 rounded-2xl" : "h-14 w-14 rounded-2xl";
+  const tile = size === "grid" ? "h-16 w-16" : "h-14 w-14";
 
   return (
     <motion.button
@@ -33,11 +33,7 @@ function AppIcon({
       className="flex flex-col items-center gap-1.5"
       aria-label={t(app.titleKey)}
     >
-      <span
-        className={`flex items-center justify-center bg-gradient-to-br shadow-lg ${tile} ${app.gradient}`}
-      >
-        <Icon className="h-7 w-7 text-white drop-shadow" />
-      </span>
+      <Icon className={`${tile} drop-shadow-lg`} />
       {size === "grid" && <span className="text-[11px] text-text-hi/85">{t(app.titleKey)}</span>}
     </motion.button>
   );

@@ -15,7 +15,7 @@ export function ProjectDetail({ project, onBack }: ProjectDetailProps) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-3 border-b border-white/5 px-5 py-3">
+      <div className="flex items-center gap-3 border-b border-line px-5 py-3">
         <button
           type="button"
           onClick={onBack}
@@ -57,7 +57,7 @@ export function ProjectDetail({ project, onBack }: ProjectDetailProps) {
             {project.stack.map((tech) => (
               <span
                 key={tech}
-                className="rounded-md border border-white/8 bg-white/5 px-2 py-1 font-mono text-[11px] text-text-hi/90"
+                className="rounded-md border border-line bg-fill-1 px-2 py-1 font-mono text-[11px] text-text-hi/90"
               >
                 {tech}
               </span>
@@ -71,7 +71,7 @@ export function ProjectDetail({ project, onBack }: ProjectDetailProps) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-[13px] font-medium text-text-hi transition-colors hover:bg-white/15"
+              className="flex items-center gap-2 rounded-xl bg-fill-2 px-4 py-2 text-[13px] font-medium text-text-hi transition-colors hover:bg-fill-3"
             >
               <GitHubIcon className="h-4 w-4" />
               {t("projects.viewGithub")}
@@ -82,7 +82,7 @@ export function ProjectDetail({ project, onBack }: ProjectDetailProps) {
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-[13px] font-semibold text-ink transition-transform hover:scale-[1.02]"
+              className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-[13px] font-semibold text-white transition-transform hover:scale-[1.02]"
             >
               <ExternalLink className="h-4 w-4" />
               {t("projects.viewDemo")}

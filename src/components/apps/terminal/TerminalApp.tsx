@@ -66,21 +66,23 @@ export function TerminalApp() {
 
   return (
      
+    // Terminal é escuro nos dois temas — autenticidade de Terminal.app.
+    // min-h-full (não h-full): o fundo precisa crescer junto com o conteúdo rolável.
     <div
-      className="flex h-full cursor-text flex-col bg-black/40 p-4 font-mono text-[13px] leading-relaxed"
+      className="flex min-h-full cursor-text flex-col bg-[#0d1117] p-4 font-mono text-[13px] leading-relaxed"
       onClick={() => inputRef.current?.focus()}
       role="log"
     >
-      <p className="mb-3 text-text-lo">{t("terminal.welcome")}</p>
+      <p className="mb-3 text-neutral-500">{t("terminal.welcome")}</p>
 
       {history.map((entry, i) => (
         <div key={i} className="mb-1">
           <div className="flex gap-2">
             <span className="shrink-0 text-emerald-400">{PROMPT}</span>
-            <span className="break-all text-text-hi">{entry.input}</span>
+            <span className="break-all text-neutral-100">{entry.input}</span>
           </div>
           {entry.output.map((line, j) => (
-            <pre key={j} className="whitespace-pre-wrap text-text-hi/85">
+            <pre key={j} className="whitespace-pre-wrap text-neutral-300">
               {line}
             </pre>
           ))}
@@ -94,7 +96,7 @@ export function TerminalApp() {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
-          className="w-full bg-transparent text-text-hi caret-emerald-400 outline-none"
+          className="w-full bg-transparent text-neutral-100 caret-emerald-400 outline-none"
           spellCheck={false}
           autoCapitalize="off"
           autoComplete="off"

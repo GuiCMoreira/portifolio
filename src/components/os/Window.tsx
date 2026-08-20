@@ -74,9 +74,12 @@ export function Window({ app, constraintsRef }: WindowProps) {
       transition={{ duration: reduced ? 0.1 : 0.28, ease: [0.32, 0.72, 0, 1] }}
       onPointerDown={() => focusApp(app.id)}
       className={cn(
-        "glass-heavy absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/60",
-        win.maximized && "!inset-x-2 !top-10 !bottom-[4.5rem] !h-auto !w-auto !transform-none",
-        isFocused ? "ring-1 ring-white/15" : "opacity-[0.97]",
+        "window-surface absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
+        // Maximizada = zoom do macOS: ocupa da borda inferior da menu bar até a
+        // borda superior do dock (76px = 68px de dock + 8px de folga do fundo).
+        // fixed escapa do WindowLayer.
+        win.maximized && "!fixed !inset-x-0 !top-8 !bottom-[76px] !h-auto !w-auto !transform-none !rounded-none",
+        isFocused && "ring-1 ring-line-strong",
       )}
       style={{
         x,
@@ -85,15 +88,17 @@ export function Window({ app, constraintsRef }: WindowProps) {
         top: basePos.y,
         width: app.defaultSize.w,
         height: app.defaultSize.h,
-        maxWidth: "calc(100vw - 24px)",
-        maxHeight: "calc(100dvh - 7rem)",
+        maxWidth: win.maximized ? undefined : "calc(100vw - 24px)",
+        maxHeight: win.maximized ? undefined : "calc(100dvh - 7rem)",
+        // O WindowLayer (z-20) cria o stacking context: menu bar e dock (z-40)
+        // ficam sempre acima, mesmo com a janela maximizada.
         zIndex: win.z,
       }}
       aria-label={t(app.titleKey)}
     >
       {/* Barra de título — alça de drag */}
       <header
-        className="group flex h-9 shrink-0 cursor-grab items-center gap-2 border-b border-white/5 px-3 select-none active:cursor-grabbing"
+        className="group flex h-9 shrink-0 cursor-grab items-center gap-2 border-b border-line px-3 select-none active:cursor-grabbing"
         onPointerDown={(e) => {
           if (!win.maximized) dragControls.start(e);
         }}

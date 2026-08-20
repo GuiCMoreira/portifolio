@@ -60,14 +60,14 @@ export function CommandPalette() {
             onClick={(e) => e.stopPropagation()}
           >
             <Command label={t("menubar.palette")} loop>
-              <div className="flex items-center gap-2 border-b border-white/8 px-4">
+              <div className="flex items-center gap-2 border-b border-line px-4">
                 <Search className="h-4 w-4 shrink-0 text-text-lo" />
                 <Command.Input
                   placeholder={t("palette.placeholder")}
                   autoFocus
                   className="h-12 w-full bg-transparent text-[14px] text-text-hi placeholder:text-text-lo/60 focus:outline-none"
                 />
-                <kbd className="rounded bg-white/8 px-1.5 py-0.5 font-mono text-[10px] text-text-lo">
+                <kbd className="rounded bg-fill-2 px-1.5 py-0.5 font-mono text-[10px] text-text-lo">
                   esc
                 </kbd>
               </div>
@@ -82,11 +82,7 @@ export function CommandPalette() {
                     const Icon = app.icon;
                     return (
                       <Command.Item key={app.id} onSelect={() => run(() => openApp(app.id))}>
-                        <span
-                          className={`flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br ${app.gradient}`}
-                        >
-                          <Icon className="h-3.5 w-3.5 text-white" />
-                        </span>
+                        <Icon className="h-6 w-6" />
                         {t(app.titleKey)}
                       </Command.Item>
                     );

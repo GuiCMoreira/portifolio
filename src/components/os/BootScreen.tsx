@@ -64,27 +64,27 @@ export function BootScreen({ onDone }: BootScreenProps) {
     >
       <div className="flex flex-col items-center gap-8">
         <div className="text-center font-mono">
-          <div className="text-[11px] tracking-[0.5em] text-text-lo uppercase">v1.0</div>
-          <h1 className="mt-2 font-display text-6xl font-semibold tracking-tight text-text-hi">
-            Gui<span className="text-accent">OS</span>
-            <span className="blink text-accent">_</span>
+          <div className="text-[11px] tracking-[0.5em] text-neutral-500 uppercase">v2.0</div>
+          <h1 className="mt-2 font-display text-6xl font-semibold tracking-tight text-white">
+            Gui<span className="text-[#7c8cf8]">OS</span>
+            <span className="blink text-[#7c8cf8]">_</span>
           </h1>
         </div>
 
         <div className="w-64">
-          <div className="h-1 overflow-hidden rounded-full bg-white/10">
+          <div className="h-1 overflow-hidden rounded-full bg-white/15">
             <div
-              className="h-full rounded-full bg-accent transition-[width] duration-100 ease-linear"
+              className="h-full rounded-full bg-white transition-[width] duration-100 ease-linear"
               style={{ width: `${Math.round(progress * 100)}%` }}
             />
           </div>
-          <p className="mt-3 min-h-4 text-center font-mono text-[11px] text-text-lo">
+          <p className="mt-3 min-h-4 text-center font-mono text-[11px] text-neutral-500">
             {t(MSG_KEYS[msgIndex])}
           </p>
         </div>
       </div>
 
-      <p className="absolute bottom-8 font-mono text-[10px] tracking-widest text-text-lo/60 uppercase">
+      <p className="absolute bottom-8 font-mono text-[10px] tracking-widest text-neutral-600 uppercase">
         {t("boot.skip")}
       </p>
     </motion.div>

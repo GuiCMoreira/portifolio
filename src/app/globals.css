@@ -1,24 +1,63 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-display: var(--font-display);
 
-  /* Paleta GuiOS */
+  /* Tokens semânticos — os valores trocam com o tema em :root/.dark */
+  --color-text-hi: var(--text-hi);
+  --color-text-lo: var(--text-lo);
+  --color-accent: var(--accent);
+  --color-fill-1: var(--fill-1);
+  --color-fill-2: var(--fill-2);
+  --color-fill-3: var(--fill-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-inset: var(--inset);
+
+  /* Fixos (boot/terminal são escuros nos dois temas) */
   --color-ink: #07080c;
   --color-ink-raised: #0d0f16;
-  --color-text-hi: #f2f4f8;
-  --color-text-lo: #9ba3b5;
-  --color-accent: #7c8cf8;
-  --color-accent-soft: #4a55a8;
 }
 
 :root {
-  --glass: rgba(22, 24, 32, 0.72);
-  --glass-heavy: rgba(16, 18, 26, 0.88);
-  --outline: rgba(255, 255, 255, 0.09);
-  --outline-strong: rgba(255, 255, 255, 0.16);
+  /* Tema claro — macOS-like */
+  --text-hi: #1d1d1f;
+  --text-lo: #6e6e73;
+  --accent: #007aff;
+  --fill-1: rgba(0, 0, 0, 0.05);
+  --fill-2: rgba(0, 0, 0, 0.08);
+  --fill-3: rgba(0, 0, 0, 0.13);
+  --line: rgba(0, 0, 0, 0.1);
+  --line-strong: rgba(0, 0, 0, 0.18);
+  --inset: rgba(0, 0, 0, 0.04);
+
+  --glass: rgba(255, 255, 255, 0.5);
+  --glass-heavy: rgba(250, 250, 252, 0.78);
+  --glass-highlight: rgba(255, 255, 255, 0.75);
+  --window-solid: #f5f5f7;
+  --desktop: #cfd0d4;
+}
+
+.dark {
+  --text-hi: #f2f4f8;
+  --text-lo: #9ba3b5;
+  --accent: #0a84ff;
+  --fill-1: rgba(255, 255, 255, 0.06);
+  --fill-2: rgba(255, 255, 255, 0.1);
+  --fill-3: rgba(255, 255, 255, 0.16);
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --inset: rgba(255, 255, 255, 0.04);
+
+  --glass: rgba(38, 40, 46, 0.5);
+  --glass-heavy: rgba(32, 34, 40, 0.78);
+  --glass-highlight: rgba(255, 255, 255, 0.14);
+  --window-solid: #1e1f24;
+  --desktop: #101114;
 }
 
 html,
@@ -28,53 +67,43 @@ body {
 }
 
 body {
-  background: var(--color-ink);
-  color: var(--color-text-hi);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--desktop);
+  color: var(--text-hi);
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans), system-ui, sans-serif;
 }
 
-/* Superfície de vidro padrão do GuiOS */
+/* Superfícies de vidro do GuiOS — tratamento estilo Liquid Glass:
+   blur alto, saturação forte e highlight interno na borda superior. */
 .glass {
   background: var(--glass);
-  border: 1px solid var(--outline);
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(36px) saturate(1.9);
+  -webkit-backdrop-filter: blur(36px) saturate(1.9);
 }
 
 .glass-heavy {
   background: var(--glass-heavy);
-  border: 1px solid var(--outline);
-  backdrop-filter: blur(28px) saturate(1.4);
-  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(40px) saturate(1.9);
+  -webkit-backdrop-filter: blur(40px) saturate(1.9);
 }
 
-/* Wallpaper: deriva lenta das "auroras" */
-@keyframes drift-a {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(6vw, -4vh) scale(1.15);
-  }
+/* Janelas de app: fundo SÓLIDO — conteúdo nunca vaza por trás. */
+.window-surface {
+  background: var(--window-solid);
+  border: 1px solid var(--line);
 }
 
-@keyframes drift-b {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1.1);
-  }
-  50% {
-    transform: translate(-5vw, 5vh) scale(0.95);
-  }
-}
-
-.aurora-a {
-  animation: drift-a 60s ease-in-out infinite;
-}
-
-.aurora-b {
-  animation: drift-b 75s ease-in-out infinite;
+/* Grão fotográfico do wallpaper */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.14'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @keyframes cursor-blink {
@@ -92,10 +121,30 @@ body {
   animation: cursor-blink 1.1s step-end infinite;
 }
 
+/* Bounce de dock ao abrir um app */
+@keyframes dock-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-14px);
+  }
+  60% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-6px);
+  }
+}
+
+.dock-bounce {
+  animation: dock-bounce 0.6s ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .aurora-a,
-  .aurora-b,
-  .blink {
+  .blink,
+  .dock-bounce {
     animation: none;
   }
 }
@@ -103,7 +152,7 @@ body {
 /* Scrollbar discreta dentro das janelas */
 .os-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  scrollbar-color: var(--line-strong) transparent;
 }
 
 .os-scroll::-webkit-scrollbar {
@@ -111,13 +160,13 @@ body {
 }
 
 .os-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--line-strong);
   border-radius: 4px;
 }
 
 /* Foco visível consistente */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
