@@ -2,8 +2,13 @@
 
 import { AtSign, ExternalLink } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/data/projects";
+import { EMAIL, GITHUB_URL, INSTAGRAM_URL, LINKEDIN_URL } from "@/data/projects";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/icons";
+import { InstagramTileIcon } from "@/components/ui/app-icons";
+
+function InstagramGlyph({ className }: { className?: string }) {
+  return <InstagramTileIcon className={className} />;
+}
 
 export function ContactApp() {
   const { t } = useI18n();
@@ -26,6 +31,15 @@ export function ContactApp() {
       href: LINKEDIN_URL,
       action: t("contact.openLink"),
       gradient: "from-sky-600 to-blue-800",
+    },
+    {
+      id: "instagram",
+      icon: InstagramGlyph,
+      name: "Instagram",
+      handle: "@_guic_m",
+      href: INSTAGRAM_URL,
+      action: t("contact.openLink"),
+      gradient: "",
     },
     {
       id: "email",
@@ -54,13 +68,17 @@ export function ContactApp() {
               href={ch.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-4 rounded-2xl border border-white/8 bg-white/[0.03] p-4 transition-all hover:border-white/15 hover:bg-white/[0.06]"
+              className="group flex items-center gap-4 rounded-2xl border border-line bg-inset p-4 transition-all hover:border-line-strong hover:bg-fill-1"
             >
-              <span
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${ch.gradient}`}
-              >
-                <Icon className="h-5 w-5 text-white" />
-              </span>
+              {ch.id === "instagram" ? (
+                <Icon className="h-11 w-11 shrink-0" />
+              ) : (
+                <span
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${ch.gradient}`}
+                >
+                  <Icon className="h-5 w-5 text-white" />
+                </span>
+              )}
               <span className="min-w-0 flex-1">
                 <span className="block text-[14px] font-semibold text-text-hi">{ch.name}</span>
                 <span className="block truncate font-mono text-[12px] text-text-lo">

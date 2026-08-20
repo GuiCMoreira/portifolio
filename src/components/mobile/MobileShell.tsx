@@ -6,10 +6,13 @@ import { MobileStatusBar } from "./MobileStatusBar";
 import { MobileHome } from "./MobileHome";
 import { MobileAppView } from "./MobileAppView";
 import { useI18n } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 import { useOSStore } from "@/lib/store";
+import { Moon, Sun } from "lucide-react";
 
 export function MobileShell() {
   const { lang, setLang } = useI18n();
+  const { theme, toggleTheme } = useTheme();
   // O app ativo vem do MESMO store do desktop: assim comandos do terminal
   // (open <projeto>, hire --me) também navegam no mobile.
   const windows = useOSStore((s) => s.windows);
@@ -27,16 +30,26 @@ export function MobileShell() {
       <div className="relative z-10 flex min-h-0 flex-1 flex-col">
         <MobileStatusBar />
 
-        {/* Toggle de idioma discreto no topo da home */}
+        {/* Toggles discretos de idioma e tema no topo da home */}
         {!activeApp && (
-          <button
-            type="button"
-            onClick={() => setLang(lang === "pt" ? "en" : "pt")}
-            className="absolute top-11 right-5 z-20 rounded-full bg-white/8 px-3 py-1 font-mono text-[11px] text-text-lo"
-            aria-label={lang === "pt" ? "Switch to English" : "Mudar para Português"}
-          >
-            {lang.toUpperCase()}
-          </button>
+          <div className="absolute top-11 right-5 z-20 flex gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="glass rounded-full p-1.5 text-text-hi/80"
+              aria-label={theme === "dark" ? "Modo claro" : "Modo escuro"}
+            >
+              {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang(lang === "pt" ? "en" : "pt")}
+              className="glass rounded-full px-3 py-1 font-mono text-[11px] text-text-hi/80"
+              aria-label={lang === "pt" ? "Switch to English" : "Mudar para Português"}
+            >
+              {lang.toUpperCase()}
+            </button>
+          </div>
         )}
 
         <MobileHome onOpen={openApp} />

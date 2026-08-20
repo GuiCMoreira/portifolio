@@ -24,9 +24,9 @@ export function MobileAppView({ appId, onClose }: MobileAppViewProps) {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.94, y: 30 }}
       transition={{ duration: reduced ? 0.1 : 0.25, ease: [0.32, 0.72, 0, 1] }}
-      className="absolute inset-0 z-30 flex flex-col bg-ink-raised"
+      className="absolute inset-0 z-30 flex flex-col bg-(--window-solid)"
     >
-      <header className="flex h-12 shrink-0 items-center gap-2 border-b border-white/5 px-3">
+      <header className="flex h-12 shrink-0 items-center gap-2 border-b border-line px-3">
         <button
           type="button"
           onClick={onClose}

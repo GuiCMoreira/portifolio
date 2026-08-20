@@ -43,7 +43,7 @@ export class AppErrorBoundary extends Component<Props, State> {
           <button
             type="button"
             onClick={this.reset}
-            className="flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm text-text-hi transition-colors hover:bg-white/15"
+            className="flex items-center gap-2 rounded-lg bg-fill-2 px-4 py-2 text-sm text-text-hi transition-colors hover:bg-fill-3"
           >
             <RotateCcw className="h-4 w-4" />
             {this.props.restartLabel}

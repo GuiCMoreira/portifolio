@@ -19,7 +19,7 @@ export function FinderIcon({ className }: IconProps) {
         </linearGradient>
       </defs>
       <rect width="64" height="64" rx="14" fill="url(#fndL)" />
-      <path d="M34 0h16a14 14 0 0 1 14 14v36a14 14 0 0 1-14 14H34c4-8 5-14 5-22h-8a2.6 2.6 0 0 1 0-5.2h8c0-8-1-14.8-5-22.8Z" fill="url(#fndR)" transform="translate(-2 0)" />
+      <path d="M32 0h18a14 14 0 0 1 14 14v36a14 14 0 0 1-14 14H32Z" fill="url(#fndR)" />
       <path d="M17 21v9M47 21v9" stroke="#0b2e59" strokeWidth="3.4" strokeLinecap="round" opacity="0.85" />
       <path d="M15 41c5 6 11 9 17 9s12-3 17-9" fill="none" stroke="#0b2e59" strokeWidth="3.4" strokeLinecap="round" opacity="0.85" />
     </svg>

@@ -76,7 +76,7 @@ export function Window({ app, constraintsRef }: WindowProps) {
       className={cn(
         "glass-heavy absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/60",
         win.maximized && "!inset-x-2 !top-10 !bottom-[4.5rem] !h-auto !w-auto !transform-none",
-        isFocused ? "ring-1 ring-white/15" : "opacity-[0.97]",
+        isFocused ? "ring-1 ring-line-strong" : "opacity-[0.97]",
       )}
       style={{
         x,
@@ -93,7 +93,7 @@ export function Window({ app, constraintsRef }: WindowProps) {
     >
       {/* Barra de título — alça de drag */}
       <header
-        className="group flex h-9 shrink-0 cursor-grab items-center gap-2 border-b border-white/5 px-3 select-none active:cursor-grabbing"
+        className="group flex h-9 shrink-0 cursor-grab items-center gap-2 border-b border-line px-3 select-none active:cursor-grabbing"
         onPointerDown={(e) => {
           if (!win.maximized) dragControls.start(e);
         }}
