@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, ExternalLink, Globe, House, Lock, RotateCw } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Clock3,
+  ExternalLink,
+  Globe,
+  House,
+  Lock,
+  RotateCw,
+} from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useOSStore } from "@/lib/store";
 import { projects, GITHUB_URL, INSTAGRAM_URL, LINKEDIN_URL } from "@/data/projects";
@@ -15,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { displayUrl, resolveInput, samePage, type SafariPage } from "./pages";
 import { GitHubPage } from "./GitHubPage";
 import { GitHubRepoPage } from "./GitHubRepoPage";
+import { SearchPage } from "./SearchPage";
 
 const START: SafariPage = { kind: "start" };
 
@@ -26,6 +36,13 @@ function StartPage({ onNavigate }: { onNavigate: (input: string) => void }) {
     { label: "GitHub", icon: <GitHubTileIcon className="h-14 w-14" />, go: () => onNavigate(GITHUB_URL) },
     { label: "LinkedIn", icon: <LinkedInTileIcon className="h-14 w-14" />, go: () => onNavigate(LINKEDIN_URL) },
     { label: "Instagram", icon: <InstagramTileIcon className="h-14 w-14" />, go: () => onNavigate(INSTAGRAM_URL) },
+  ];
+
+  const recentSearches = [
+    { pt: "preciso de um desenvolvedor urgente", en: "need a developer urgently" },
+    { pt: "como contratar um dev fullstack", en: "how to hire a fullstack dev" },
+    { pt: "dev que entrega no prazo existe?", en: "does a dev who ships on time exist?" },
+    { pt: "quem fez esse site?", en: "who made this website?" },
   ];
 
   return (
@@ -45,6 +62,27 @@ function StartPage({ onNavigate }: { onNavigate: (input: string) => void }) {
             <span className="text-[11px] text-text-hi/85">{fav.label}</span>
           </button>
         ))}
+      </div>
+
+      {/* Pesquisas "recentes" — a isca de humor do Guigle */}
+      <h3 className="mt-8 mb-2 font-mono text-[11px] tracking-widest text-text-lo uppercase">
+        {t("safari.recentSearches")}
+      </h3>
+      <div className="flex flex-wrap gap-2">
+        {recentSearches.map((s) => {
+          const q = tx(s);
+          return (
+            <button
+              key={s.pt}
+              type="button"
+              onClick={() => onNavigate(q)}
+              className="flex items-center gap-1.5 rounded-full border border-line bg-inset px-3 py-1.5 text-[12px] text-text-hi/85 transition-colors hover:border-line-strong hover:bg-fill-1"
+            >
+              <Clock3 className="h-3 w-3 text-text-lo" />
+              {q}
+            </button>
+          );
+        })}
       </div>
 
       <h3 className="mt-8 mb-1 font-mono text-[11px] tracking-widest text-text-lo uppercase">
@@ -206,6 +244,9 @@ export function SafariApp() {
         {page.kind === "start" && <StartPage onNavigate={navigateInput} />}
         {page.kind === "github" && <GitHubPage key={frameKey} />}
         {page.kind === "github-repo" && <GitHubRepoPage key={`${page.repo}-${frameKey}`} name={page.repo} />}
+        {page.kind === "search" && (
+          <SearchPage key={`${page.query}-${frameKey}`} query={page.query} onNavigate={navigateInput} />
+        )}
         {page.kind === "blocked" && <BlockedPage url={page.url} host={page.host} />}
         {page.kind === "web" && (
           <div className="flex h-full flex-col">

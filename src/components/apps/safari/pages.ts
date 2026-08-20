@@ -5,6 +5,7 @@ export type SafariPage =
   | { kind: "start" }
   | { kind: "github" }
   | { kind: "github-repo"; repo: string }
+  | { kind: "search"; query: string }
   | { kind: "web"; url: string }
   | { kind: "blocked"; url: string; host: string };
 
@@ -12,6 +13,7 @@ export function samePage(a: SafariPage, b: SafariPage): boolean {
   if (a.kind !== b.kind) return false;
   if (a.kind === "web" || a.kind === "blocked") return a.url === (b as { url: string }).url;
   if (a.kind === "github-repo") return a.repo === (b as { repo: string }).repo;
+  if (a.kind === "search") return a.query === (b as { query: string }).query;
   return true;
 }
 
@@ -35,6 +37,8 @@ export function displayUrl(page: SafariPage): string {
       return "github.com/GuiCMoreira";
     case "github-repo":
       return `github.com/GuiCMoreira/${page.repo}`;
+    case "search":
+      return `guigle.com/search?q=${encodeURIComponent(page.query)}`;
     case "web":
       return page.url.replace(/^https?:\/\//, "");
     case "blocked":
@@ -45,6 +49,13 @@ export function displayUrl(page: SafariPage): string {
 export function resolveInput(raw: string): SafariPage {
   const input = raw.trim();
   if (!input || input === "guios://start") return { kind: "start" };
+
+  // Texto sem cara de endereço = pesquisa no Guigle™ (o buscador do GuiOS).
+  const searchQuery = input.match(/^(?:https?:\/\/)?guigle\.com\/search\?q=(.+)$/i);
+  if (searchQuery) return { kind: "search", query: decodeURIComponent(searchQuery[1]) };
+  const looksLikeUrl =
+    /^https?:\/\//i.test(input) || (/\.[a-z]{2,}(\/|$|\?)/i.test(input) && !/\s/.test(input));
+  if (!looksLikeUrl) return { kind: "search", query: input };
 
   const withProto = /^https?:\/\//i.test(input) ? input : `https://${input}`;
   let url: URL;

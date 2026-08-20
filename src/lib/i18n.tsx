@@ -131,7 +131,30 @@ const dict: Record<string, LocalizedText> = {
   "clock.contact": { pt: "Entrar em contato", en: "Get in touch" },
 
   // Safari
-  "safari.addressPlaceholder": { pt: "Digitar site ou endereço", en: "Enter website or address" },
+  "safari.addressPlaceholder": {
+    pt: "Pesquisar no Guigle ou digitar endereço",
+    en: "Search Guigle or enter address",
+  },
+  "safari.recentSearches": { pt: "Pesquisas recentes", en: "Recent searches" },
+
+  // Guigle™ — o buscador que só encontra uma pessoa
+  "guigle.searching": {
+    pt: "vasculhando a internet inteira…",
+    en: "scouring the entire internet…",
+  },
+  "guigle.stats": {
+    pt: "Aproximadamente 6.740.000 resultados (0,42 segundos) — curiosamente, todos apontam para a mesma pessoa.",
+    en: "About 6,740,000 results (0.42 seconds) — curiously, they all point to the same person.",
+  },
+  "guigle.didYouMean": { pt: "Você quis dizer:", en: "Did you mean:" },
+  "guigle.didYouMeanQuery": {
+    pt: "contratar o Guilherme Carvalho",
+    en: "hire Guilherme Carvalho",
+  },
+  "guigle.footer": {
+    pt: "Guigle™ — resultados imparciais desde nunca. Nenhum outro dev foi consultado na produção desta página.",
+    en: "Guigle™ — unbiased results since never. No other devs were consulted in the making of this page.",
+  },
   "safari.start": { pt: "Página inicial", en: "Start page" },
   "safari.back": { pt: "Voltar", en: "Back" },
   "safari.forward": { pt: "Avançar", en: "Forward" },
