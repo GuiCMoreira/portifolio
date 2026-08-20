@@ -28,8 +28,18 @@ export function FinderIcon({ className }: IconProps) {
 
 export function SafariIcon({ className }: IconProps) {
   // Ícone original do tema WhiteSur (GPL-3, crédito no README).
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src="/app-safari.svg" alt="" className={className} draggable={false} aria-hidden />;
+  // O asset preenche o arquivo até a borda; o scale alinha com os vizinhos.
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/app-safari.svg"
+      alt=""
+      className={className}
+      style={{ transform: "scale(0.92)" }}
+      draggable={false}
+      aria-hidden
+    />
+  );
 }
 
 export function TerminalMacIcon({ className }: IconProps) {
