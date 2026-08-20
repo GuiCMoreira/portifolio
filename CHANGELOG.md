@@ -37,3 +37,16 @@
 - **Sites com iframe liberado** carregam dentro do navegador; sites que bloqueiam embed (LinkedIn, Instagram etc.) mostram página de bloqueio estilo Safari com botão "Abrir em nova aba".
 - Preparado para rodar demos dos projetos embutidas quando forem hospedadas.
 - Ícone de bússola estilo macOS; no mobile o Safari entra na grade da home.
+
+## [2.2.0] — 2026-08-20
+
+### Guigle, vida no sistema e prontidão para o mundo
+
+- **Guigle™**: buscador paródia no Safari — pesquisas recentes na start page, animação de busca e resultados que apontam todos para o Guilherme.
+- **Lixeira no dock**: os bugs reais deletados durante o desenvolvimento deste site, com direito a lápides. 🪦
+- **Terminal**: novos comandos `matrix` (chuva de caracteres), `coffee` e `guigle <termo>`.
+- **Widget de clima real** de Bragança Paulista (Open-Meteo) no desktop.
+- **Notificação estilo macOS** convidando para contato após 45s de exploração (1x por sessão).
+- **Menu de contexto** no botão direito do desktop (wallpaper, Ajustes, Terminal, Sobre).
+- **Seletor de wallpaper** nos Ajustes: água-viva, montanhas, ponte à noite ou gradiente.
+- **Pronto para o mundo**: OG image (preview bonito ao compartilhar o link), 404 kernel panic, PWA instalável (manifest + ícones), robots.txt e sitemap.

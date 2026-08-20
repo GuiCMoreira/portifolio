@@ -3,6 +3,7 @@ import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n";
 import { ThemeProvider } from "@/lib/theme";
 import { WallpaperProvider } from "@/lib/wallpaper";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -21,6 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Guilherme Carvalho — Fullstack Developer | GuiOS",
   description:
     "Portfólio de Guilherme Carvalho, desenvolvedor web fullstack (Next.js, React, PHP). Apresentado como GuiOS: um sistema operacional interativo — abra os apps, use o terminal, explore.",
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
     siteName: "GuiOS",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Guilherme Carvalho — Fullstack Developer | GuiOS",
     description:
       "Um portfólio que é um sistema operacional: janelas, dock, terminal interativo e command palette.",

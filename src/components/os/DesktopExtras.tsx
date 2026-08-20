@@ -128,7 +128,8 @@ export function DesktopContextMenu() {
 
   useEffect(() => {
     const onContext = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
       // só no "fundo" do desktop — janelas, dock, menus etc. ficam de fora
       if (target.closest("section, nav, header, button, a, input, [role='dialog']")) return;
       e.preventDefault();
