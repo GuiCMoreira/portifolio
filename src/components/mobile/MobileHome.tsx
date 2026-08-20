@@ -17,6 +17,7 @@ import {
 import { useOSStore } from "@/lib/store";
 import { useWeather } from "@/lib/hooks";
 import { weatherEmoji } from "@/components/os/DesktopExtras";
+import { Search } from "lucide-react";
 
 interface MobileHomeProps {
   onOpen: (id: AppId, originLayoutId: string) => void;
@@ -121,6 +122,7 @@ const DOCK_IDS: AppId[] = ["projects", "terminal", "about", "contact"];
 export function MobileHome({ onOpen }: MobileHomeProps) {
   const { t } = useI18n();
   const setSystemDialog = useOSStore((s) => s.setSystemDialog);
+  const setPaletteOpen = useOSStore((s) => s.setPaletteOpen);
   const gridApps = APPS.filter((a) => !DOCK_IDS.includes(a.id));
   const dockApps = DOCK_IDS.map((id) => APPS.find((a) => a.id === id)!);
 
@@ -165,8 +167,8 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
         <p className="mt-3 text-[13px] leading-relaxed text-text-lo">{t("welcome.tagline")}</p>
       </div>
 
-      {/* Apps de sistema: Ajustes e Lixeira */}
-      <div className="mt-8 grid grid-cols-4 gap-x-4 gap-y-6">
+      {/* Apps de sistema: Ajustes e Lixeira — mesma geometria de colunas do dock */}
+      <div className="mt-8 grid grid-cols-4 justify-items-center gap-y-6">
         {systemTiles.map((tile) => (
           <motion.button
             key={tile.id}
@@ -182,8 +184,8 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
         ))}
       </div>
 
-      {/* Última linha da home: Safari + sociais, 4 alinhados como o dock */}
-      <div className="mt-auto mb-5 flex items-center justify-around px-4">
+      {/* Última linha da home: Safari + sociais, colunas alinhadas com o dock */}
+      <div className="mt-auto mb-4 grid grid-cols-4 justify-items-center">
         {gridApps.map((app) => (
           <AppIcon key={app.id} id={app.id} size="grid" onOpen={onOpen} />
         ))}
@@ -192,8 +194,19 @@ export function MobileHome({ onOpen }: MobileHomeProps) {
         ))}
       </div>
 
+      {/* Pílula de pesquisa, entre os apps e o dock — como no iOS */}
+      <button
+        type="button"
+        onClick={() => setPaletteOpen(true)}
+        className="glass mx-auto mb-4 flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[12px] font-medium text-text-hi/90"
+        aria-label={t("mobile.search")}
+      >
+        <Search className="h-3.5 w-3.5" />
+        {t("mobile.search")}
+      </button>
+
       {/* Dock mobile com os 4 apps principais */}
-      <div className="glass flex items-center justify-around rounded-3xl px-4 py-3">
+      <div className="glass grid grid-cols-4 justify-items-center rounded-3xl py-3">
         {dockApps.map((app) => (
           <AppIcon key={app.id} id={app.id} size="dock" onOpen={onOpen} />
         ))}

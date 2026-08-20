@@ -11,10 +11,10 @@ import { MobileAppView } from "./MobileAppView";
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { useOSStore } from "@/lib/store";
-import { Moon, Search, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 
 export function MobileShell() {
-  const { lang, setLang, t } = useI18n();
+  const { lang, setLang } = useI18n();
   const { theme, toggleTheme } = useTheme();
   // O app ativo vem do MESMO store do desktop: assim comandos do terminal
   // (open <projeto>, hire --me) também navegam no mobile.
@@ -22,7 +22,6 @@ export function MobileShell() {
   const focused = useOSStore((s) => s.focused);
   const openApp = useOSStore((s) => s.openApp);
   const closeApp = useOSStore((s) => s.closeApp);
-  const setPaletteOpen = useOSStore((s) => s.setPaletteOpen);
 
   const activeApp =
     focused && windows[focused].open && !windows[focused].minimized ? focused : null;
@@ -45,16 +44,8 @@ export function MobileShell() {
       <div className="relative z-10 flex min-h-0 flex-1 flex-col pt-[env(safe-area-inset-top)]">
         <MobileStatusBar />
 
-        {/* Ações rápidas: linha própria entre a status bar e o widget */}
+        {/* Ações rápidas: tema e idioma (a busca é a pílula acima do dock, como no iOS) */}
         <div className="flex justify-end gap-2 px-6 pt-1 pb-3">
-          <button
-            type="button"
-            onClick={() => setPaletteOpen(true)}
-            className="glass flex h-8 w-8 items-center justify-center rounded-full text-text-hi/80"
-            aria-label={t("menubar.palette")}
-          >
-            <Search className="h-3.5 w-3.5" />
-          </button>
           <button
             type="button"
             onClick={toggleTheme}
