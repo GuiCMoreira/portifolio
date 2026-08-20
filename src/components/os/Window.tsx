@@ -165,7 +165,7 @@ export function Window({ app, constraintsRef }: WindowProps) {
           <button
             type="button"
             onClick={() => closeApp(app.id)}
-            className="flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57] text-[8px] text-black/60"
+            className="flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57] text-[8px] text-black"
             aria-label={t("window.close")}
           >
             <span className="opacity-0 group-hover:opacity-100">✕</span>
@@ -173,7 +173,7 @@ export function Window({ app, constraintsRef }: WindowProps) {
           <button
             type="button"
             onClick={() => minimizeApp(app.id)}
-            className="flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] text-[8px] text-black/60"
+            className="flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] text-[8px] text-black"
             aria-label={t("window.minimize")}
           >
             <span className="opacity-0 group-hover:opacity-100">–</span>
@@ -181,7 +181,7 @@ export function Window({ app, constraintsRef }: WindowProps) {
           <button
             type="button"
             onClick={() => toggleMaximize(app.id)}
-            className="flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840] text-[8px] text-black/60"
+            className="flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840] text-[8px] text-black"
             aria-label={t("window.maximize")}
           >
             <span className="opacity-0 group-hover:opacity-100">⤢</span>

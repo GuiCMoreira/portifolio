@@ -16,18 +16,26 @@ export function MatrixRain({ onDone }: { onDone: () => void }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    canvas.width = parent.clientWidth;
-    canvas.height = parent.clientHeight;
-
     const fontSize = 14;
-    const columns = Math.ceil(canvas.width / fontSize);
-    const rows = Math.ceil(canvas.height / fontSize);
-    // colunas nascem espalhadas pela tela: chuva visível já no primeiro frame
-    const drops = Array.from({ length: columns }, () => Math.floor(Math.random() * rows));
+    let drops: number[] = [];
 
-    // fundo inicial opaco para o efeito "ligar" na hora
-    ctx.fillStyle = "#0d1117";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // (re)dimensiona o bitmap junto com a janela — sem isso, maximizar o
+    // terminal deixava o canvas esticado no tamanho antigo
+    const setup = () => {
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+      const columns = Math.ceil(canvas.width / fontSize);
+      const rows = Math.ceil(canvas.height / fontSize);
+      // colunas nascem espalhadas pela tela: chuva visível já no primeiro frame
+      drops = Array.from({ length: columns }, (_, i) => drops[i] ?? Math.floor(Math.random() * rows));
+      while (drops.length < columns) drops.push(Math.floor(Math.random() * rows));
+      ctx.fillStyle = "#0d1117";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+    setup();
+
+    const observer = new ResizeObserver(setup);
+    observer.observe(parent);
 
     let raf = 0;
     let last = 0;
@@ -61,6 +69,7 @@ export function MatrixRain({ onDone }: { onDone: () => void }) {
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(timeout);
+      observer.disconnect();
       window.removeEventListener("keydown", exit);
       canvas.removeEventListener("pointerdown", exit);
     };
