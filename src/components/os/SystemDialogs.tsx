@@ -8,16 +8,20 @@ import { useTheme } from "@/lib/theme";
 import { useOSStore } from "@/lib/store";
 import { AVATAR_URL, GITHUB_URL } from "@/data/projects";
 import { mainStack } from "@/data/career";
+import { deletedBugs } from "@/data/trash";
 import { GitHubIcon } from "@/components/ui/icons";
+import { TrashIcon } from "@/components/ui/app-icons";
 import { cn } from "@/lib/utils";
 
 function DialogShell({
   title,
   onClose,
+  wide,
   children,
 }: {
   title: string;
   onClose: () => void;
+  wide?: boolean;
   children: React.ReactNode;
 }) {
   const reduced = useReducedMotion();
@@ -37,7 +41,10 @@ function DialogShell({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={reduced ? {} : { opacity: 0, scale: 0.95, y: 8 }}
         transition={{ duration: 0.18, ease: "easeOut" }}
-        className="glass-heavy relative w-80 rounded-2xl p-6 shadow-2xl shadow-black/40"
+        className={cn(
+          "glass-heavy relative rounded-2xl p-6 shadow-2xl shadow-black/40",
+          wide ? "w-[26rem] max-w-[calc(100vw-2rem)]" : "w-80",
+        )}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -162,6 +169,38 @@ function SettingsDialog({ onClose }: { onClose: () => void }) {
   );
 }
 
+function TrashDialog({ onClose }: { onClose: () => void }) {
+  const { t, tx } = useI18n();
+
+  return (
+    <DialogShell title={t("trash.title")} onClose={onClose} wide>
+      <div className="flex items-center gap-3">
+        <TrashIcon className="h-10 w-10" />
+        <div>
+          <h2 className="text-[15px] font-bold text-text-hi">{t("trash.title")}</h2>
+          <p className="text-[11px] text-text-lo">{t("trash.subtitle")}</p>
+        </div>
+      </div>
+
+      <ul className="os-scroll mt-4 max-h-80 space-y-2.5 overflow-y-auto pr-1">
+        {deletedBugs.map((bug) => (
+          <li key={bug.id} className="rounded-xl border border-line bg-inset p-3">
+            <p className="flex items-baseline justify-between gap-2 text-[13px] font-semibold text-text-hi">
+              <span>🪦 {tx(bug.title)}</span>
+              <span className="shrink-0 font-mono text-[10px] font-normal text-text-lo">
+                {bug.deletedAt}
+              </span>
+            </p>
+            <p className="mt-1 text-[12px] leading-relaxed text-text-lo">{tx(bug.detail)}</p>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-3 text-center text-[11px] text-text-lo/70">{t("trash.footer")}</p>
+    </DialogShell>
+  );
+}
+
 export function SystemDialogs() {
   const dialog = useOSStore((s) => s.systemDialog);
   const setSystemDialog = useOSStore((s) => s.setSystemDialog);
@@ -171,6 +210,7 @@ export function SystemDialogs() {
     <AnimatePresence>
       {dialog === "about" && <AboutDialog key="about" onClose={close} />}
       {dialog === "settings" && <SettingsDialog key="settings" onClose={close} />}
+      {dialog === "trash" && <TrashDialog key="trash" onClose={close} />}
     </AnimatePresence>
   );
 }

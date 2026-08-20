@@ -134,6 +134,28 @@ export function LinkedInTileIcon({ className }: IconProps) {
   );
 }
 
+export function TrashIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <defs>
+        <linearGradient id="trsh" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#eceef1" />
+          <stop offset="1" stopColor="#c3c8d1" />
+        </linearGradient>
+      </defs>
+      {/* cesto aramado estilo macOS */}
+      <path d="M18 16h28l-3.5 36a4 4 0 0 1-4 3.6h-13a4 4 0 0 1-4-3.6Z" fill="url(#trsh)" />
+      <path d="M18 16h28l-3.5 36a4 4 0 0 1-4 3.6h-13a4 4 0 0 1-4-3.6Z" fill="none" stroke="#9aa1ad" strokeWidth="1.6" />
+      <g stroke="#9aa1ad" strokeWidth="1.4" opacity="0.8">
+        <path d="M23 20l2.4 31M32 20v31M41 20l-2.4 31" />
+        <path d="M19.5 26h25M20.4 35h23.2M21.3 44h21.4" />
+      </g>
+      <rect x="15" y="12" width="34" height="5" rx="2.5" fill="#d6dae0" stroke="#9aa1ad" strokeWidth="1.4" />
+      <path d="M27 12a5 5 0 0 1 10 0" fill="none" stroke="#9aa1ad" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
 export function InstagramTileIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>

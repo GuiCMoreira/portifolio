@@ -17,6 +17,7 @@ import {
   GitHubTileIcon,
   InstagramTileIcon,
   LinkedInTileIcon,
+  TrashIcon,
 } from "@/components/ui/app-icons";
 import { cn } from "@/lib/utils";
 
@@ -112,6 +113,7 @@ export function Dock() {
   const windows = useOSStore((s) => s.windows);
   const openApp = useOSStore((s) => s.openApp);
   const focusApp = useOSStore((s) => s.focusApp);
+  const setSystemDialog = useOSStore((s) => s.setSystemDialog);
   const mouseX = useMotionValue(Infinity);
 
   return (
@@ -155,6 +157,18 @@ export function Dock() {
           <Icon className="h-full w-full drop-shadow-md" />
         </DockItem>
       ))}
+
+      {/* separador: sociais | lixeira */}
+      <div className="mx-1 mb-2.5 h-10 w-px self-end bg-line-strong" aria-hidden />
+
+      <DockItem
+        mouseX={mouseX}
+        label={t("trash.title")}
+        bounce
+        onActivate={() => setSystemDialog("trash")}
+      >
+        <TrashIcon className="h-full w-full drop-shadow-md" />
+      </DockItem>
     </nav>
   );
 }

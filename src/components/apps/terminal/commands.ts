@@ -25,6 +25,9 @@ const HELP: Record<Lang, string[]> = {
     "  carreira          trajetória profissional",
     "  neofetch          informações do sistema",
     "  hire --me         a melhor decisão que você vai tomar hoje",
+    "  guigle <termo>    pesquisa no buscador oficial do GuiOS",
+    "  coffee            recarrega a cafeína",
+    "  matrix            você sabe o que isso faz",
     "  lang pt|en        troca o idioma do GuiOS",
     "  clear             limpa a tela",
   ],
@@ -38,6 +41,9 @@ const HELP: Record<Lang, string[]> = {
     "  career            professional journey",
     "  neofetch          system information",
     "  hire --me         the best decision you'll make today",
+    "  guigle <term>     search on GuiOS's official search engine",
+    "  coffee            recharge the caffeine",
+    "  matrix            you know what this does",
     "  lang pt|en        switch GuiOS language",
     "  clear             clear the screen",
   ],
@@ -79,7 +85,16 @@ function neofetch(lang: Lang): string[] {
   return art.map((line, i) => `${line}  ${info[i] ?? ""}`).concat(info.slice(art.length));
 }
 
-export function runCommand(input: string, ctx: CommandContext): string[] | "CLEAR" {
+const COFFEE_ART = [
+  "      ( (",
+  "       ) )",
+  "    ........",
+  "    |      |]",
+  "    \\      /",
+  "     `----'",
+];
+
+export function runCommand(input: string, ctx: CommandContext): string[] | "CLEAR" | "MATRIX" {
   const raw = input.trim();
   if (!raw) return [];
   const [cmd, ...args] = raw.split(/\s+/);
@@ -170,6 +185,23 @@ export function runCommand(input: string, ctx: CommandContext): string[] | "CLEA
 
     case "clear":
       return "CLEAR";
+
+    case "matrix":
+      return "MATRIX";
+
+    case "coffee":
+    case "cafe":
+    case "café":
+      return [
+        ...COFFEE_ART,
+        isPt ? "cafeína recarregada. produtividade +200% ☕" : "caffeine recharged. productivity +200% ☕",
+      ];
+
+    case "guigle": {
+      if (!arg) return isPt ? ["uso: guigle <termo de busca>"] : ["usage: guigle <search term>"];
+      ctx.openApp("safari", `guigle.com/search?q=${encodeURIComponent(arg)}`);
+      return isPt ? [`pesquisando "${arg}" no Guigle™…`] : [`searching "${arg}" on Guigle™…`];
+    }
 
     case "exit":
       return isPt ? ["não há saída. você está no GuiOS agora. 😌"] : ["there is no exit. you live in GuiOS now. 😌"];

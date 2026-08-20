@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useOSStore } from "@/lib/store";
 import { runCommand } from "./commands";
+import { MatrixRain } from "./MatrixRain";
 
 interface HistoryEntry {
   input: string;
@@ -19,6 +20,7 @@ export function TerminalApp() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [value, setValue] = useState("");
   const [cmdIndex, setCmdIndex] = useState(-1);
+  const [matrixOn, setMatrixOn] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -35,6 +37,10 @@ export function TerminalApp() {
     const result = runCommand(input, { lang, openApp, setLang });
     if (result === "CLEAR") {
       setHistory([]);
+      return;
+    }
+    if (result === "MATRIX") {
+      setMatrixOn(true);
       return;
     }
     // Cap evita crescimento sem limite do DOM (Enter segurado, loops colados).
@@ -69,10 +75,11 @@ export function TerminalApp() {
     // Terminal é escuro nos dois temas — autenticidade de Terminal.app.
     // min-h-full (não h-full): o fundo precisa crescer junto com o conteúdo rolável.
     <div
-      className="flex min-h-full cursor-text flex-col bg-[#0d1117] p-4 font-mono text-[13px] leading-relaxed"
+      className="relative flex min-h-full cursor-text flex-col bg-[#0d1117] p-4 font-mono text-[13px] leading-relaxed"
       onClick={() => inputRef.current?.focus()}
       role="log"
     >
+      {matrixOn && <MatrixRain onDone={() => setMatrixOn(false)} />}
       <p className="mb-3 text-neutral-500">{t("terminal.welcome")}</p>
 
       {history.map((entry, i) => (

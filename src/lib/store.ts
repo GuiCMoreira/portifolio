@@ -38,7 +38,7 @@ function nextFocus(windows: Record<AppId, WindowState>, closing: AppId): AppId |
 }
 
 export type PowerState = "on" | "sleep" | "off";
-export type SystemDialog = "about" | "settings" | null;
+export type SystemDialog = "about" | "settings" | "trash" | null;
 
 interface OSStore {
   windows: Record<AppId, WindowState>;

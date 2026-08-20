@@ -196,6 +196,17 @@ const dict: Record<string, LocalizedText> = {
   "safari.ghFollowing": { pt: "seguindo", en: "following" },
   "safari.ghRepoCount": { pt: "repositórios", en: "repositories" },
 
+  // Lixeira
+  "trash.title": { pt: "Lixeira", en: "Trash" },
+  "trash.subtitle": {
+    pt: "Bugs reais deletados durante o desenvolvimento deste site. Descansem em paz.",
+    en: "Real bugs deleted while building this site. May they rest in peace.",
+  },
+  "trash.footer": {
+    pt: "A lixeira não pode ser esvaziada — esses bugs são troféus. 🏆",
+    en: "The trash can't be emptied — these bugs are trophies. 🏆",
+  },
+
   // Menu do sistema (logo G)
   "sysmenu.about": { pt: "Sobre o GuiOS", en: "About GuiOS" },
   "sysmenu.settings": { pt: "Ajustes…", en: "Settings…" },
