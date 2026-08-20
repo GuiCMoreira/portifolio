@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Battery, Moon, Search, Sun, Wifi } from "lucide-react";
+import { Battery, BatteryCharging, BatteryLow, Moon, Search, Sun, Wifi, WifiOff } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { useOSStore } from "@/lib/store";
+import { useBattery, useOnline } from "@/lib/hooks";
 import { APPS, getApp } from "@/data/apps";
 import type { AppId } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { BatteryPopover, ClockPopover, WifiPopover } from "./StatusPopovers";
 
 function Clock() {
   const { lang } = useI18n();
@@ -44,6 +46,45 @@ interface MenuDef {
   items: { labelKey: string; action: () => void }[];
 }
 
+// Item de status da direita (Wi-Fi/bateria): botão de ícone + popover ancorado.
+function StatusItem({
+  id,
+  label,
+  icon,
+  openMenu,
+  setOpenMenu,
+  children,
+}: {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  openMenu: string | null;
+  setOpenMenu: (v: string | null) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpenMenu(openMenu === id ? null : id)}
+        className={cn(
+          "rounded-md p-1 text-text-hi/80 hover:bg-fill-1",
+          openMenu === id && "bg-fill-2",
+        )}
+        aria-expanded={openMenu === id}
+        aria-label={label}
+      >
+        {icon}
+      </button>
+      {openMenu === id && (
+        <div className="glass-heavy absolute top-7 right-0 z-50 rounded-xl shadow-2xl shadow-black/25">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function MenuBar() {
   const { t, lang, setLang } = useI18n();
   const { theme, toggleTheme } = useTheme();
@@ -54,6 +95,8 @@ export function MenuBar() {
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const barRef = useRef<HTMLElement>(null);
+  const online = useOnline();
+  const battery = useBattery();
 
   // Fecha dropdown ao clicar fora ou apertar Esc.
   useEffect(() => {
@@ -144,7 +187,7 @@ export function MenuBar() {
         ))}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1.5">
         <button
           type="button"
           onClick={toggleTheme}
@@ -172,10 +215,62 @@ export function MenuBar() {
           <Search className="h-3.5 w-3.5" />
         </button>
 
-        <Wifi className="h-3.5 w-3.5 text-text-hi/80" aria-hidden />
-        <Battery className="h-4 w-4 text-text-hi/80" aria-hidden />
+        {/* Wi-Fi: status real de conexão do visitante */}
+        <StatusItem
+          id="wifi"
+          label="Wi-Fi"
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+          icon={
+            online ? (
+              <Wifi className="h-3.5 w-3.5" />
+            ) : (
+              <WifiOff className="h-3.5 w-3.5 text-red-400" />
+            )
+          }
+        >
+          <WifiPopover />
+        </StatusItem>
 
-        <Clock />
+        {/* Bateria: nível real do dispositivo (ou cafeína) */}
+        <StatusItem
+          id="battery"
+          label={t("battery.title")}
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+          icon={
+            battery.charging ? (
+              <BatteryCharging className="h-4 w-4" />
+            ) : battery.level <= 0.2 ? (
+              <BatteryLow className="h-4 w-4 text-red-400" />
+            ) : (
+              <Battery className="h-4 w-4" />
+            )
+          }
+        >
+          <BatteryPopover />
+        </StatusItem>
+
+        {/* Relógio: mini central com calendário e contato */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setOpenMenu(openMenu === "clock" ? null : "clock")}
+            className={cn(
+              "rounded-md px-1.5 py-0.5 hover:bg-fill-1",
+              openMenu === "clock" && "bg-fill-2",
+            )}
+            aria-expanded={openMenu === "clock"}
+            aria-label={t("clock.ariaLabel")}
+          >
+            <Clock />
+          </button>
+          {openMenu === "clock" && (
+            <div className="glass-heavy absolute top-7 right-0 z-50 rounded-xl shadow-2xl shadow-black/25">
+              <ClockPopover onClose={() => setOpenMenu(null)} />
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

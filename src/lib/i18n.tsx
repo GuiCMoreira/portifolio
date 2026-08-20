@@ -111,6 +111,23 @@ const dict: Record<string, LocalizedText> = {
   // Mobile
   "mobile.greeting": { pt: "GuiOS", en: "GuiOS" },
   "mobile.back": { pt: "Início", en: "Home" },
+
+  // Popovers de status (Wi-Fi, bateria, relógio)
+  "wifi.connected": { pt: "Conectado", en: "Connected" },
+  "wifi.offline": { pt: "Sem conexão", en: "Offline" },
+  "wifi.otherNetworks": { pt: "Outras redes", en: "Other networks" },
+  "battery.title": { pt: "Bateria", en: "Battery" },
+  "battery.device": { pt: "Essa é a bateria real do seu dispositivo.", en: "That's your device's real battery." },
+  "battery.apiNote": { pt: "(sim, Battery Status API 😉)", en: "(yes, Battery Status API 😉)" },
+  "battery.charging": { pt: "Carregando", en: "Charging" },
+  "battery.onBattery": { pt: "Usando a bateria", en: "On battery power" },
+  "battery.caffeine": { pt: "Cafeína do Gui", en: "Gui's caffeine" },
+  "battery.caffeineNote": { pt: "recarregando com café ☕", en: "recharging with coffee ☕" },
+  "clock.ariaLabel": { pt: "Data e hora", en: "Date and time" },
+  "clock.yourTime": { pt: "Seu horário", en: "Your time" },
+  "clock.myTime": { pt: "Meu horário (Bragança Paulista)", en: "My time (Bragança Paulista, BR)" },
+  "clock.available": { pt: "Disponível para novas oportunidades", en: "Open to new opportunities" },
+  "clock.contact": { pt: "Entrar em contato", en: "Get in touch" },
 };
 
 interface I18nValue {
