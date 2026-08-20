@@ -213,12 +213,7 @@ function TrashDialog({ onClose }: { onClose: () => void }) {
       <ul className="os-scroll mt-4 max-h-80 space-y-2.5 overflow-y-auto pr-1">
         {deletedBugs.map((bug) => (
           <li key={bug.id} className="rounded-xl border border-line bg-inset p-3">
-            <p className="flex items-baseline justify-between gap-2 text-[13px] font-semibold text-text-hi">
-              <span>🪦 {tx(bug.title)}</span>
-              <span className="shrink-0 font-mono text-[10px] font-normal text-text-lo">
-                {bug.deletedAt}
-              </span>
-            </p>
+            <p className="text-[13px] font-semibold text-text-hi">🪦 {tx(bug.title)}</p>
             <p className="mt-1 text-[12px] leading-relaxed text-text-lo">{tx(bug.detail)}</p>
           </li>
         ))}
