@@ -77,8 +77,9 @@ export function Window({ app, constraintsRef }: WindowProps) {
         "window-surface absolute flex flex-col overflow-hidden rounded-xl shadow-2xl shadow-black/40",
         // Maximizada = zoom do macOS: ocupa da borda inferior da menu bar até a
         // borda superior do dock (76px = 68px de dock + 8px de folga do fundo).
-        // fixed escapa do WindowLayer.
-        win.maximized && "!fixed !inset-x-0 !top-8 !bottom-[76px] !h-auto !w-auto !transform-none !rounded-none",
+        // fixed escapa do WindowLayer. Sem transform-none: o layout animation do
+        // motion anima o crescimento via transform (drag já zera o seu ao soltar).
+        win.maximized && "!fixed !inset-x-0 !top-8 !bottom-[76px] !h-auto !w-auto !rounded-none",
         isFocused && "ring-1 ring-line-strong",
       )}
       style={{
