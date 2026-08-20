@@ -27,40 +27,9 @@ export function FinderIcon({ className }: IconProps) {
 }
 
 export function SafariIcon({ className }: IconProps) {
-  // 36 marcações do mostrador (maiores nos pontos cardeais)
-  const ticks = Array.from({ length: 36 }, (_, i) => i * 10);
-  return (
-    <svg viewBox="0 0 64 64" className={className} aria-hidden>
-      <defs>
-        <radialGradient id="sfrDial" cx="0.5" cy="0.2" r="1.1">
-          <stop offset="0" stopColor="#59c5f7" />
-          <stop offset="1" stopColor="#1e6ff1" />
-        </radialGradient>
-      </defs>
-      <rect width="64" height="64" rx="14" fill="#ffffff" />
-      <circle cx="32" cy="32" r="29" fill="url(#sfrDial)" />
-      {/* marcações */}
-      <g stroke="#ffffff" strokeLinecap="round">
-        {ticks.map((a) => (
-          <line
-            key={a}
-            x1="32"
-            y1="5.5"
-            x2="32"
-            y2={a % 90 === 0 ? "10.5" : "8.8"}
-            strokeWidth={a % 90 === 0 ? 1.8 : 1.1}
-            opacity={a % 90 === 0 ? 1 : 0.85}
-            transform={`rotate(${a} 32 32)`}
-          />
-        ))}
-      </g>
-      {/* agulha da bússola */}
-      <g transform="rotate(45 32 32)">
-        <path d="M32 8.5l5.5 21.5h-11Z" fill="#ff3b30" />
-        <path d="M32 55.5l-5.5-21.5h11Z" fill="#f4f5f7" />
-      </g>
-    </svg>
-  );
+  // Ícone original do tema WhiteSur (GPL-3, crédito no README).
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/app-safari.svg" alt="" className={className} draggable={false} aria-hidden />;
 }
 
 export function TerminalMacIcon({ className }: IconProps) {
@@ -75,8 +44,8 @@ export function TerminalMacIcon({ className }: IconProps) {
       </defs>
       <rect width="64" height="64" rx="14" fill="url(#trm)" />
       <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth="1.5" />
-      <path d="M9 13l15.5 13L9 39" fill="none" stroke="#fff" strokeWidth="5.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M31 42h20" stroke="#fff" strokeWidth="5.8" strokeLinecap="round" />
+      <path d="M12 16l13 11-13 11" fill="none" stroke="#fff" strokeWidth="4.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M30 39h16" stroke="#fff" strokeWidth="4.6" strokeLinecap="round" />
     </svg>
   );
 }
@@ -110,9 +79,9 @@ export function MailIcon({ className }: IconProps) {
         </linearGradient>
       </defs>
       <rect width="64" height="64" rx="14" fill="url(#mml)" />
-      <rect x="7" y="14" width="50" height="36" rx="6" fill="#ffffff" />
-      <path d="M9 18.5l23 18 23-18" fill="none" stroke="#b9c7dd" strokeWidth="3.2" strokeLinejoin="round" />
-      <path d="M9 47l17-14.5M55 47l-17-14.5" fill="none" stroke="#d7e0ee" strokeWidth="2.4" />
+      <rect x="10" y="17" width="44" height="30" rx="5.5" fill="#ffffff" />
+      <path d="M12 21l20 15.5L52 21" fill="none" stroke="#b9c7dd" strokeWidth="2.8" strokeLinejoin="round" />
+      <path d="M12 44.5l14.5-12M52 44.5l-14.5-12" fill="none" stroke="#d7e0ee" strokeWidth="2.1" />
     </svg>
   );
 }
@@ -133,7 +102,7 @@ export function LinkedInTileIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>
       <rect width="64" height="64" rx="14" fill="#0a66c2" />
-      <g transform="translate(7 7) scale(2.083)" fill="#ffffff">
+      <g transform="translate(5 5) scale(2.25)" fill="#ffffff">
         <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z" />
       </g>
     </svg>
@@ -141,35 +110,9 @@ export function LinkedInTileIcon({ className }: IconProps) {
 }
 
 export function SettingsTileIcon({ className }: IconProps) {
-  // engrenagem detalhada estilo iOS: dentes finos, aro, 3 raios e cubo central
-  const teeth = Array.from({ length: 24 }, (_, i) => i * 15);
-  const spokes = [30, 150, 270];
-  return (
-    <svg viewBox="0 0 64 64" className={className} aria-hidden>
-      <defs>
-        <linearGradient id="stg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#eef0f3" />
-          <stop offset="1" stopColor="#c2c5cd" />
-        </linearGradient>
-      </defs>
-      <rect width="64" height="64" rx="14" fill="url(#stg)" />
-      <g fill="#494b52">
-        {teeth.map((a) => (
-          <rect key={a} x="30.4" y="5.5" width="3.2" height="5.5" rx="1.2" transform={`rotate(${a} 32 32)`} />
-        ))}
-        <circle cx="32" cy="32" r="23" />
-      </g>
-      {/* interior vazado */}
-      <circle cx="32" cy="32" r="16.5" fill="url(#stg)" />
-      <g stroke="#494b52" strokeWidth="4" strokeLinecap="round">
-        {spokes.map((a) => (
-          <line key={a} x1="32" y1="32" x2="32" y2="15" transform={`rotate(${a} 32 32)`} />
-        ))}
-      </g>
-      <circle cx="32" cy="32" r="5.5" fill="#494b52" />
-      <circle cx="32" cy="32" r="1.8" fill="#d9dbe0" />
-    </svg>
-  );
+  // Ícone original do tema WhiteSur (GPL-3, crédito no README).
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/app-settings.svg" alt="" className={className} draggable={false} aria-hidden />;
 }
 
 export function TrashIcon({ className }: IconProps) {
@@ -191,9 +134,9 @@ export function InstagramTileIcon({ className }: IconProps) {
         </radialGradient>
       </defs>
       <rect width="64" height="64" rx="14" fill="url(#igg)" />
-      <rect x="9.5" y="9.5" width="45" height="45" rx="13.5" fill="none" stroke="#ffffff" strokeWidth="4.6" />
-      <circle cx="32" cy="32" r="11" fill="none" stroke="#ffffff" strokeWidth="4.6" />
-      <circle cx="44.5" cy="19.5" r="3.1" fill="#ffffff" />
+      <rect x="11" y="11" width="42" height="42" rx="12.5" fill="none" stroke="#ffffff" strokeWidth="4.4" />
+      <circle cx="32" cy="32" r="10.3" fill="none" stroke="#ffffff" strokeWidth="4.4" />
+      <circle cx="43.3" cy="20.7" r="3" fill="#ffffff" />
     </svg>
   );
 }

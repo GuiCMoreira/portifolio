@@ -49,7 +49,7 @@ Pensado para a [Vercel](https://vercel.com): basta importar o repositório — z
 
 ## Créditos
 
-- Ícone da Lixeira: [WhiteSur icon theme](https://github.com/vinceliuice/WhiteSur-icon-theme) (GPL-3), de Vince Liuice.
+- Ícones da Lixeira, Safari e Ajustes: [WhiteSur icon theme](https://github.com/vinceliuice/WhiteSur-icon-theme) (GPL-3), de Vince Liuice.
 - Wallpapers: [Lorem Picsum](https://picsum.photos/) (fotos do Unsplash).
 - Demais ícones de apps: recriações próprias em SVG.
 
