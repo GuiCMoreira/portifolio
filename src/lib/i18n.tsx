@@ -199,8 +199,8 @@ const dict: Record<string, LocalizedText> = {
   // Lixeira
   "trash.title": { pt: "Lixeira", en: "Trash" },
   "trash.subtitle": {
-    pt: "Bugs reais deletados durante o desenvolvimento deste site. Descansem em paz.",
-    en: "Real bugs deleted while building this site. May they rest in peace.",
+    pt: "Bugs reais encontrados e deletados durante o desenvolvimento deste sistema.",
+    en: "Real bugs found and deleted while building this system.",
   },
   "trash.footer": {
     pt: "A lixeira não pode ser esvaziada — esses bugs são troféus. 🏆",
