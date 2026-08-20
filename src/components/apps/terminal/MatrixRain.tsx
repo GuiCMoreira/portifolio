@@ -21,7 +21,13 @@ export function MatrixRain({ onDone }: { onDone: () => void }) {
 
     const fontSize = 14;
     const columns = Math.ceil(canvas.width / fontSize);
-    const drops = Array.from({ length: columns }, () => Math.floor(Math.random() * -30));
+    const rows = Math.ceil(canvas.height / fontSize);
+    // colunas nascem espalhadas pela tela: chuva visível já no primeiro frame
+    const drops = Array.from({ length: columns }, () => Math.floor(Math.random() * rows));
+
+    // fundo inicial opaco para o efeito "ligar" na hora
+    ctx.fillStyle = "#0d1117";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     let raf = 0;
     let last = 0;
@@ -42,8 +48,13 @@ export function MatrixRain({ onDone }: { onDone: () => void }) {
     };
     raf = requestAnimationFrame(draw);
 
-    const timeout = setTimeout(onDone, 6000);
-    const exit = () => onDone();
+    const timeout = setTimeout(onDone, 8000);
+    // carência: o Enter que disparou o comando (ou seu repeat) não pode fechar
+    const born = performance.now();
+    const exit = () => {
+      if (performance.now() - born < 600) return;
+      onDone();
+    };
     window.addEventListener("keydown", exit);
     canvas.addEventListener("pointerdown", exit);
 
