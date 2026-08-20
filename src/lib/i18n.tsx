@@ -17,6 +17,12 @@ const dict: Record<string, LocalizedText> = {
   // Menu bar
   "menubar.desktop": { pt: "Mesa", en: "Desktop" },
   "menubar.palette": { pt: "Buscar", en: "Search" },
+  "menu.file": { pt: "Arquivo", en: "File" },
+  "menu.help": { pt: "Ajuda", en: "Help" },
+  "menu.closeWindow": { pt: "Fechar janela", en: "Close window" },
+  "menu.helpPalette": { pt: "Busca rápida (⌘K)", en: "Quick search (⌘K)" },
+  "menu.helpTerminal": { pt: "Abrir o Terminal", en: "Open Terminal" },
+  "menu.helpHire": { pt: "Falar comigo", en: "Get in touch" },
 
   // Apps (títulos)
   "apps.projects": { pt: "Projetos", en: "Projects" },
