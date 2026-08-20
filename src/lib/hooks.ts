@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { storageGet, storageSet } from "./safe-storage";
 
 const QUERY = "(max-width: 767px)";
 
@@ -81,6 +82,61 @@ function caffeineLevel(): BatteryInfo {
   const h = new Date().getHours();
   if (h < 8) return { real: false, level: Math.max(0.2, (h + 1) / 8), charging: true };
   return { real: false, level: Math.max(0.1, 1 - (h - 8) * 0.06), charging: false };
+}
+
+// ---- Clima real de Bragança Paulista (Open-Meteo, sem chave) ----
+
+export interface WeatherInfo {
+  temp: number;
+  code: number;
+}
+
+const WEATHER_CACHE_KEY = "guios.weather";
+const WEATHER_TTL_MS = 30 * 60 * 1000;
+
+export function useWeather(): WeatherInfo | null {
+  const [weather, setWeather] = useState<WeatherInfo | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const apply = (w: WeatherInfo) => {
+      if (!cancelled) setWeather(w);
+    };
+
+    const cached = storageGet("session", WEATHER_CACHE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached) as WeatherInfo & { at: number };
+        if (Date.now() - parsed.at < WEATHER_TTL_MS) {
+          Promise.resolve().then(() => apply({ temp: parsed.temp, code: parsed.code }));
+          return;
+        }
+      } catch {
+        // cache corrompido — segue para o fetch
+      }
+    }
+
+    fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=-22.9527&longitude=-46.5419&current=temperature_2m,weather_code&timezone=America/Sao_Paulo",
+    )
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const current = data?.current;
+        if (typeof current?.temperature_2m !== "number") return;
+        const w = { temp: Math.round(current.temperature_2m), code: current.weather_code ?? 0 };
+        storageSet("session", WEATHER_CACHE_KEY, JSON.stringify({ ...w, at: Date.now() }));
+        apply(w);
+      })
+      .catch(() => {
+        // sem clima hoje — o widget simplesmente não aparece
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return weather;
 }
 
 export function useBattery(): BatteryInfo {

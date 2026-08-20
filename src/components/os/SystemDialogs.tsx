@@ -9,6 +9,7 @@ import { useOSStore } from "@/lib/store";
 import { AVATAR_URL, GITHUB_URL } from "@/data/projects";
 import { mainStack } from "@/data/career";
 import { deletedBugs } from "@/data/trash";
+import { useWallpaper, WALLPAPERS } from "@/lib/wallpaper";
 import { GitHubIcon } from "@/components/ui/icons";
 import { TrashIcon } from "@/components/ui/app-icons";
 import { cn } from "@/lib/utils";
@@ -137,6 +138,7 @@ function OptionRow({
 function SettingsDialog({ onClose }: { onClose: () => void }) {
   const { t, lang, setLang } = useI18n();
   const { theme, setTheme } = useTheme();
+  const { wallpaper, setWallpaper } = useWallpaper();
 
   return (
     <DialogShell title={t("sysmenu.settings")} onClose={onClose}>
@@ -164,6 +166,32 @@ function SettingsDialog({ onClose }: { onClose: () => void }) {
         <OptionRow selected={lang === "en"} onSelect={() => setLang("en")}>
           <Languages className="h-3.5 w-3.5" /> English
         </OptionRow>
+      </div>
+
+      <p className="mt-4 mb-1.5 font-mono text-[10px] tracking-widest text-text-lo uppercase">
+        {t("settings.wallpaper")}
+      </p>
+      <div className="grid grid-cols-4 gap-2">
+        {WALLPAPERS.map((w) => (
+          <button
+            key={w.id}
+            type="button"
+            onClick={() => setWallpaper(w.id)}
+            className={cn(
+              "overflow-hidden rounded-lg border-2 transition-colors",
+              wallpaper === w.id ? "border-accent" : "border-line hover:border-line-strong",
+            )}
+            aria-label={lang === "pt" ? w.labelPt : w.labelEn}
+            title={lang === "pt" ? w.labelPt : w.labelEn}
+          >
+            {w.src ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={w.src} alt="" className="h-11 w-full object-cover" />
+            ) : (
+              <span className="block h-11 w-full bg-[linear-gradient(135deg,#b8c4e8,#c2d6d4)] dark:bg-[linear-gradient(135deg,#141a33,#12303a)]" />
+            )}
+          </button>
+        ))}
       </div>
     </DialogShell>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n";
 import { ThemeProvider } from "@/lib/theme";
+import { WallpaperProvider } from "@/lib/wallpaper";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -64,7 +65,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         className={`${spaceGrotesk.variable} ${manrope.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
+          <WallpaperProvider>
+            <LanguageProvider>{children}</LanguageProvider>
+          </WallpaperProvider>
         </ThemeProvider>
       </body>
     </html>

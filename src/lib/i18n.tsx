@@ -229,6 +229,20 @@ const dict: Record<string, LocalizedText> = {
   "settings.light": { pt: "Claro", en: "Light" },
   "settings.dark": { pt: "Escuro", en: "Dark" },
   "settings.language": { pt: "Idioma", en: "Language" },
+  "settings.wallpaper": { pt: "Fundo de tela", en: "Wallpaper" },
+
+  // Clima, notificação e menu de contexto
+  "weather.aria": { pt: "Clima em Bragança Paulista", en: "Weather in Bragança Paulista" },
+  "notify.title": { pt: "Gostou do que viu por aqui?", en: "Enjoying what you've seen?" },
+  "notify.body": {
+    pt: "O dono deste sistema está disponível para novas oportunidades. ☕",
+    en: "The owner of this system is open to new opportunities. ☕",
+  },
+  "notify.cta": { pt: "Falar com o Guilherme", en: "Talk to Guilherme" },
+  "ctxmenu.wallpaper": { pt: "Alterar fundo de tela", en: "Change wallpaper" },
+  "ctxmenu.settings": { pt: "Ajustes…", en: "Settings…" },
+  "ctxmenu.terminal": { pt: "Abrir o Terminal", en: "Open Terminal" },
+  "ctxmenu.about": { pt: "Sobre o GuiOS", en: "About GuiOS" },
 };
 
 interface I18nValue {
