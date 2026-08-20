@@ -40,7 +40,8 @@ function AppIcon({
   const { t } = useI18n();
   const app = getApp(id);
   const Icon = app.icon;
-  const tile = size === "grid" ? "h-16 w-16" : "h-14 w-14";
+  // No iOS, os ícones do dock têm o MESMO tamanho dos da grade.
+  const tile = "h-16 w-16";
   const layoutId = appOriginLayoutId(size, id);
 
   return (
