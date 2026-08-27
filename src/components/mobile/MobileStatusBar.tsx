@@ -62,7 +62,6 @@ export function MobileStatusBar() {
         onClick={() => toggle("clock")}
         className="rounded-md px-1 font-mono text-[12px] font-semibold text-text-hi"
         aria-expanded={sheet === "clock"}
-        aria-label={lang === "pt" ? "Data e hora" : "Date and time"}
       >
         {time}
       </button>

@@ -10,7 +10,7 @@ import { DesktopContextMenu, WeatherWidget } from "./DesktopExtras";
 
 export function Desktop() {
   return (
-    <div className="relative h-dvh w-full overflow-hidden">
+    <main className="relative h-dvh w-full overflow-hidden">
       <Wallpaper />
       <MenuBar />
       <WelcomeWidget />
@@ -19,6 +19,6 @@ export function Desktop() {
       <Dock />
       <CommandPalette />
       <DesktopContextMenu />
-    </div>
+    </main>
   );
 }

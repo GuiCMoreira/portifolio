@@ -38,7 +38,7 @@ export function MobileShell() {
   const originLayoutId = activeApp && origin?.app === activeApp ? origin.layoutId : undefined;
 
   return (
-    <div className="relative flex h-dvh w-full flex-col overflow-hidden">
+    <main className="relative flex h-dvh w-full flex-col overflow-hidden">
       <Wallpaper />
 
       <div className="relative z-10 flex min-h-0 flex-1 flex-col pt-[env(safe-area-inset-top)]">
@@ -58,7 +58,7 @@ export function MobileShell() {
             type="button"
             onClick={() => setLang(lang === "pt" ? "en" : "pt")}
             className="glass flex h-8 items-center rounded-full px-3 font-mono text-[11px] text-text-hi/80"
-            aria-label={lang === "pt" ? "Switch to English" : "Mudar para Português"}
+            aria-label={`${lang.toUpperCase()} — ${lang === "pt" ? "switch to English" : "mudar para português"}`}
           >
             {lang.toUpperCase()}
           </button>
@@ -85,6 +85,6 @@ export function MobileShell() {
       />
 
       <CommandPalette />
-    </div>
+    </main>
   );
 }

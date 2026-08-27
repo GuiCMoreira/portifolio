@@ -334,7 +334,7 @@ export function MenuBar() {
           type="button"
           onClick={() => setLang(lang === "pt" ? "en" : "pt")}
           className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold text-text-hi/80 hover:bg-fill-1"
-          aria-label={lang === "pt" ? "Switch to English" : "Mudar para Português"}
+          aria-label={`${lang.toUpperCase()} — ${lang === "pt" ? "switch to English" : "mudar para português"}`}
         >
           {lang.toUpperCase()}
         </button>
@@ -394,7 +394,6 @@ export function MenuBar() {
               openMenu === "clock" && "bg-fill-2",
             )}
             aria-expanded={openMenu === "clock"}
-            aria-label={t("clock.ariaLabel")}
           >
             <Clock />
           </button>
