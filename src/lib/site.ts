@@ -1,5 +1,3 @@
-// URL pública do site. Na Vercel, defina NEXT_PUBLIC_SITE_URL nas variáveis
-// de ambiente do projeto quando tiver o domínio final (ex.: https://guios.dev).
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+// URL pública canônica do site (sitemap, OG, robots). Se um dia houver domínio
+// próprio, basta definir NEXT_PUBLIC_SITE_URL na Vercel que ela tem prioridade.
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://guicmoreira.vercel.app";
