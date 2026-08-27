@@ -48,3 +48,7 @@ Fix: geometria 100% em motion values com canais separados (x/y exclusivos do dra
 | Drag pós-restauro | delta exato 50,40 |
 | Clamp de topo | drag de -600px em y parou na borda da menu bar |
 | Fechar/reabrir/maximizar | posição persistida e maximização íntegra |
+
+## Resize de janelas (20/08, noite)
+
+8 alças (4 bordas + 4 cantos) com pointer events puros sobre os motion values. Regressão: leste +120 ✓ · sul +80 ✓ · oeste (w+100, x−100) ✓ · norte (h+60, y−60) ✓ · canto SE −250/−200 ✓ · mínimo 320×220 ✓ · drag pós-resize ✓ · maximizar/restaurar volta ao tamanho custom ✓ · tamanho persiste ao fechar/reabrir ✓.

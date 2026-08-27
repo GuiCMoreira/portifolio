@@ -39,5 +39,7 @@ export interface WindowState {
   maximized: boolean;
   z: number;
   pos: { x: number; y: number };
+  /** tamanho definido pelo usuário via resize; null = tamanho padrão do app */
+  size: { w: number; h: number } | null;
   payload?: string;
 }

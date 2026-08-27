@@ -22,6 +22,24 @@ interface WindowProps {
 // Folga entre o fundo do WindowLayer e o topo do dock (76px do viewport - 64px do layer).
 const DOCK_GAP = 12;
 
+// Tamanho mínimo de janela ao redimensionar.
+const MIN_W = 320;
+const MIN_H = 220;
+
+type ResizeDir = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
+
+// Alças de resize: posição/cursor de cada borda e canto.
+const RESIZE_HANDLES: { dir: ResizeDir; className: string }[] = [
+  { dir: "n", className: "top-0 right-3 left-3 h-1.5 cursor-ns-resize" },
+  { dir: "s", className: "right-3 bottom-0 left-3 h-1.5 cursor-ns-resize" },
+  { dir: "e", className: "top-3 right-0 bottom-3 w-1.5 cursor-ew-resize" },
+  { dir: "w", className: "top-3 bottom-3 left-0 w-1.5 cursor-ew-resize" },
+  { dir: "nw", className: "top-0 left-0 h-3 w-3 cursor-nwse-resize" },
+  { dir: "ne", className: "top-0 right-0 h-3 w-3 cursor-nesw-resize" },
+  { dir: "sw", className: "bottom-0 left-0 h-3 w-3 cursor-nesw-resize" },
+  { dir: "se", className: "right-0 bottom-0 h-3 w-3 cursor-nwse-resize" },
+];
+
 export function Window({ app, constraintsRef }: WindowProps) {
   const { t } = useI18n();
   const win = useOSStore((s) => s.windows[app.id]);
@@ -31,6 +49,7 @@ export function Window({ app, constraintsRef }: WindowProps) {
   const toggleMaximize = useOSStore((s) => s.toggleMaximize);
   const focusApp = useOSStore((s) => s.focusApp);
   const setPos = useOSStore((s) => s.setPos);
+  const setSize = useOSStore((s) => s.setSize);
   const clearPayload = useOSStore((s) => s.clearPayload);
 
   const dragControls = useDragControls();
@@ -44,12 +63,59 @@ export function Window({ app, constraintsRef }: WindowProps) {
   const y = useMotionValue(win.pos.y);
   const tx = useMotionValue(0);
   const ty = useMotionValue(0);
-  const w = useMotionValue(app.defaultSize.w);
-  const h = useMotionValue(app.defaultSize.h);
+  const w = useMotionValue(win.size?.w ?? app.defaultSize.w);
+  const h = useMotionValue(win.size?.h ?? app.defaultSize.h);
   const radius = useMotionValue(12);
 
   const sectionRef = useRef<HTMLElement>(null);
   const firstRun = useRef(true);
+  // tamanho "normal" atual (pós-resize) — alvo do restaurar-da-maximização
+  const normalSize = useRef({
+    w: win.size?.w ?? app.defaultSize.w,
+    h: win.size?.h ?? app.defaultSize.h,
+  });
+
+  // Redimensionamento pelas bordas/cantos: pointer events puros direto nos
+  // motion values — sem re-render durante o gesto e sem tocar no drag.
+  const startResize = (dir: ResizeDir) => (e: React.PointerEvent<HTMLDivElement>) => {
+    if (win.maximized) return;
+    e.stopPropagation();
+    focusApp(app.id);
+    const handle = e.currentTarget;
+    try {
+      handle.setPointerCapture(e.pointerId);
+    } catch {
+      // sem pointer capture disponível — os listeners no window cobrem
+    }
+    const start = { px: e.clientX, py: e.clientY, x: x.get(), y: y.get(), w: w.get(), h: h.get() };
+
+    const onMove = (ev: PointerEvent) => {
+      const dx = ev.clientX - start.px;
+      const dy = ev.clientY - start.py;
+      if (dir.includes("e")) w.set(Math.max(MIN_W, start.w + dx));
+      if (dir.includes("s")) h.set(Math.max(MIN_H, start.h + dy));
+      if (dir.includes("w")) {
+        const nw = Math.max(MIN_W, start.w - dx);
+        w.set(nw);
+        x.set(start.x + (start.w - nw));
+      }
+      if (dir.includes("n")) {
+        const nh = Math.max(MIN_H, start.h - dy);
+        h.set(nh);
+        y.set(Math.max(0, start.y + (start.h - nh)));
+      }
+    };
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      const size = { w: Math.round(w.get()), h: Math.round(h.get()) };
+      normalSize.current = size;
+      setSize(app.id, size);
+      setPos(app.id, { x: Math.round(x.get()), y: Math.round(y.get()) });
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
 
   useEffect(() => {
     const layerRect = () => constraintsRef.current?.getBoundingClientRect();
@@ -92,8 +158,8 @@ export function Window({ app, constraintsRef }: WindowProps) {
 
     animate(tx, 0, opts);
     animate(ty, 0, opts);
-    animate(w, app.defaultSize.w, opts);
-    animate(h, app.defaultSize.h, opts);
+    animate(w, normalSize.current.w, opts);
+    animate(h, normalSize.current.h, opts);
     animate(radius, 12, opts);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [win.maximized]);
@@ -203,6 +269,17 @@ export function Window({ app, constraintsRef }: WindowProps) {
           <AppComponent />
         </AppErrorBoundary>
       </div>
+
+      {/* Alças de redimensionamento (bordas e cantos), como num OS real */}
+      {!win.maximized &&
+        RESIZE_HANDLES.map(({ dir, className: handleClass }) => (
+          <div
+            key={dir}
+            onPointerDown={startResize(dir)}
+            className={cn("absolute z-10 touch-none select-none", handleClass)}
+            aria-hidden
+          />
+        ))}
     </motion.section>
   );
 }

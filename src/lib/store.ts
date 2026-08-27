@@ -22,6 +22,7 @@ function initialWindows(): Record<AppId, WindowState> {
         maximized: false,
         z: 0,
         pos: DEFAULT_POS[appId],
+        size: null,
         payload: undefined,
       } satisfies WindowState,
     ]),
@@ -56,6 +57,7 @@ interface OSStore {
   toggleMaximize: (id: AppId) => void;
   focusApp: (id: AppId) => void;
   setPos: (id: AppId, pos: { x: number; y: number }) => void;
+  setSize: (id: AppId, size: { w: number; h: number }) => void;
   clearPayload: (id: AppId) => void;
   setBooted: (b: boolean) => void;
   setPaletteOpen: (open: boolean) => void;
@@ -134,6 +136,11 @@ export const useOSStore = create<OSStore>((set) => ({
   setPos: (id, pos) =>
     set((s) => ({
       windows: { ...s.windows, [id]: { ...s.windows[id], pos } },
+    })),
+
+  setSize: (id, size) =>
+    set((s) => ({
+      windows: { ...s.windows, [id]: { ...s.windows[id], size } },
     })),
 
   clearPayload: (id) =>
